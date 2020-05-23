@@ -12,4 +12,9 @@ class Kelompok extends Model
         'kelompok_nomor',
         'identity_number',
     ];
+    protected $table = 'kelompok' ;
+
+     public function Project(){
+        return $this->belongsTo('App\Project');
+    }
 }

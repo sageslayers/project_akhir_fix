@@ -20,4 +20,7 @@ class Project extends Model
     public function Project_Details(){
         return $this->hasMany('App\Project_Details');
     }
+    public function Kelompok(){
+        return $this->hasMany('App\Kelompok');
+    }
 }

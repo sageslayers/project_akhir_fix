@@ -37,6 +37,10 @@ class ProjectDetailsController extends Controller
      */
     public function store(Project $project, Request $request)
     {
+
+        if (count($project->project_details) > $project->project_phase   ){
+            return back()->withStatus(__('Total Phase exceed maximum'));
+        }
         $ProjectDetails = $request->all();
         // $ProjectDetails->project_id = $project->project_id ;
         // $ProjectDetails->project_details_desc = $request->project_details_desc;

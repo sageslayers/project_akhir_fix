@@ -1,7 +1,8 @@
 <?php
 $dateOfBirth = auth()->user()->users_details->users_details_birth ;
 $years = \Carbon\Carbon::parse($dateOfBirth)->age;
-$detail = auth()->user()->users_details
+$detail = auth()->user()->users_details;
+$imgurl = Storage::url(auth()->user()->avatar);
 ?>
 
 @extends('layouts.app', ['title' => __('User Profile')])
@@ -20,19 +21,31 @@ $detail = auth()->user()->users_details
                     <div class="row justify-content-center">
                         <div class="col-lg-3 order-lg-2">
                             <div class="card-profile-image">
+
                                 <a href="#">
-                                <img alt="Image placeholder" src="{{ asset('argon') }}/img/brand/{{ auth()->user()->avatar }}">
+
+                                    @if(session('tmp_img'))
+
+                                    <img alt="Image placeholder" src="{{ session('tmp_img') }}">
+                                    @else
+                                    <img alt="Image placeholder" src="{{ auth()->user()->avatar }}">
+                                        @endif
                                 </a>
+
+
                             </div>
                         </div>
                     </div>
                     <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                         <div class="d-flex justify-content-between">
+
                             <a href="#" class="btn btn-sm btn-info mr-4">{{ __('Connect') }}</a>
                             <a href="#" class="btn btn-sm btn-default float-right">{{ __('Message') }}</a>
                         </div>
                     </div>
+
                     <div class="card-body pt-0 pt-md-4">
+
                         <div class="row">
                             <div class="col">
                                 <div class="card-profile-stats d-flex justify-content-center mt-md-5">
@@ -79,6 +92,16 @@ $detail = auth()->user()->users_details
                         </div>
                     </div>
                     <div class="card-body">
+
+                        <form action="{{ route('photo.update') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                                    Avatar<br>
+
+                                    <img src="{{auth()->user()->avatar}}" width="200" /><br><br>
+                                    <input type="file" class="" name="avatar" > </a><br><br>
+                                    <input type="submit" class="btn btn-sm btn-default" value ="Upload">
+                        </form>
+                        <hr class="my-4" />
                         <form method="post" action="{{ route('profile.update') }}" autocomplete="off">
                             @csrf
                             @method('put')
@@ -169,6 +192,10 @@ $detail = auth()->user()->users_details
                                         </span>
                                     @endif
                                 </div>
+
+
+
+
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

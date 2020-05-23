@@ -20,16 +20,10 @@ $years = \Carbon\Carbon::parse($dateOfBirth)->age;
 $detail = auth()->user()->users_details;
 $month = date('m');
 $day = date('d');
-$day2 = $day+7;
 $year = date('Y');
 $hour = date('h');
 $minute = date('i');
-$a = date('A');
-// dd($project);
-$today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;
-$later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
-
-?>
+$today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
 
 <!DOCTYPE html>
 <html>
@@ -50,6 +44,7 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
   <link rel="stylesheet" href="../../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
   <!-- Argon CSS -->
   <link rel="stylesheet" href="../../assets/css/argon.css?v=1.2.0" type="text/css">
+
 </head>
 
 <body>
@@ -86,7 +81,11 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                                     {{ __('User profile') }}
                                 </a>
                             </li>
-
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('user.index') }}">
+                                    {{ __('User Management') }}
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -96,7 +95,6 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                         <span class="nav-link-text" >{{ __('Manage Project') }}</span>
                     </a>
                 </li>
-
                 <li class="nav-item ">
                     <a class="nav-link" href="{{ route('map') }}">
                         <i class="ni ni-pin-3 text-orange"></i> {{ __('Maps') }}
@@ -383,22 +381,16 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
             </div>
             <div class="col-lg-6 col-5 text-right">
               <!-- Button trigger modal -->
-              @if($project->project_has_question)
-              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example4-modal-lg">
-              <i class="ni ni-fat-add"></i> New Phase
-              </button>
-              @else
+
               <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example2-modal-lg">
-                <i class="ni ni-fat-add"></i> Set up Question
+                <i class="ni ni-fat-add"></i> Add Member
                 </button>
-              @endif
+
               <!-- Modal -->
 
 
 
-              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example3-modal-lg">
-                <i class="ni ni-align-center"></i> View Project Details
-                </button>
+              <a href="#" class="btn btn-sm btn-neutral">Filters</a>
             </div>
           </div>
         </div>
@@ -444,126 +436,6 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
             </div>
             <!-- Light table -->
 
-            <div class="modal hide fade bd-example3-modal-lg" id="modelId" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                              <div class="modal-header">
-                                      <h5 class="modal-title"></h5>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                              <span aria-hidden="true">&times;</span>
-                                          </button>
-                                  </div>
-                          <div class="modal-body">
-                              <div class="container-fluid">
-                              <form method="post" action="{{ route('project.update',$project) }}" autocomplete="off">
-                            @csrf
-
-                            @method('put')
-
-                            <h6 class="heading-small text-muted mb-4">{{ __('Project Details') }}</h6>
-
-
-
-
-                            <div class="form-group{{ $errors->has('project_topic') ? ' has-danger' : '' }} mb-3">
-                                <div class="input-group input-group-alternative">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><strong>{{__('Topic : ')}}</strong> </span>
-
-                                    </div>
-
-                                    <input class="form-control{{ $errors->has('project_topic') ? ' is-invalid' : '' }}" placeholder="{{ __('Topic') }}" value="{{$project->project_topic}}" type="text" name="project_topic" required autofocus>
-                                </div>
-                                @if ($errors->has('project_topic'))
-                                    <span class="invalid-feedback" style="display: block;" role="alert">
-                                        <strong>{{ $errors->first('project_topic') }}</strong>
-                                    </span>
-                                @endif
-
-                                </div>
-
-                                <div class="form-group{{ $errors->has('project_subtopic') ? ' has-danger' : '' }} mb-3">
-                                <div class="input-group input-group-alternative">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><strong>{{__('Sub Topic : ')}}</strong> </span>
-                                    </div>
-                                    <input class="form-control{{ $errors->has('project_subtopic') ? ' is-invalid' : '' }}" placeholder="{{ __('sub topic') }}" type="text" name="project_subtopic" value="{{$project->project_subtopic}}" required autofocus>
-                                </div>
-                                @if ($errors->has('project_subtopic'))
-                                    <span class="invalid-feedback" style="display: block;" role="alert">
-                                        <strong>{{ $errors->first('project_subtopic') }}</strong>
-                                    </span>
-                                @endif
-
-                                </div>
-                                {{__('Basic Competencies ')}}
-                                <div class="form-group{{ $errors->has('project_kd') ? ' has-danger' : '' }} mb-3">
-                                    <div class="input-group input-group-alternative">
-                                        <div class="input-group-prepend">
-
-                                        </div>
-                                        <textarea rows="12" class="form-control{{ $errors->has('project_kd') ? ' is-invalid' : '' }}" placeholder="{{ __('basic competencies ') }}" type="text" name="project_kd"  required autofocus>{{$project->project_kd}}</textarea>
-                                    </div>
-                                    @if ($errors->has('project_kd'))
-                                        <span class="invalid-feedback" style="display: block;" role="alert">
-                                            <strong>{{ $errors->first('project_kd') }}</strong>
-                                        </span>
-                                    @endif
-
-                                    </div>
-
-                                    {{__('Indicator ')}}
-                                <div class="form-group{{ $errors->has('project_indicator') ? ' has-danger' : '' }} mb-3">
-                                <div class="input-group input-group-alternative">
-                                    <div class="input-group-prepend">
-
-                                    </div>
-                                    <textarea rows="12" class="form-control{{ $errors->has('project_indicator') ? ' is-invalid' : '' }}" placeholder="{{ __('Indicator') }}" type="text" name="project_indicator" required autofocus >{{$project->project_indicator}}</textarea>
-                                </div>
-
-
-                                </div>
-
-                                <div class="form-group{{ $errors->has('project_max_member') ? ' has-danger' : '' }} mb-3">
-                                <div class="input-group input-group-alternative">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><strong> {{__('Group :  ')}}</strong></span>
-                                    </div>
-                                    <input class="form-control{{ $errors->has('project_indicator') ? ' is-invalid' : '' }}"   type="number" readonly value="{{$project->project_group}}" name="project_max_member" required autofocus >
-                                </div>
-                                @if ($errors->has('project_max_member'))
-                                    <span class="invalid-feedback" style="display: block;" role="alert">
-                                        <strong>{{ $errors->first('project_max_member') }}</strong>
-                                    </span>
-                                @endif
-                                <input type="hidden" name="identity_number" value={{auth()->user()->identity_number}} />
-
-                                </div>
-                                <div class="form-group{{ $errors->has('project_phase') ? ' has-danger' : '' }} mb-3">
-                                    <div class="input-group input-group-alternative">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><strong> {{__('Phase :  ')}}</strong></span>
-                                        </div>
-                                    <input class="form-control{{ $errors->has('project_phase') ? ' is-invalid' : '' }}" placeholder="{{ __('Project phase') }}" readonly value="{{$project->project_phase}}" type="number" name="project_phase" required autofocus />
-                                    </div>
-                                </div>
-
-
-
-                                <div class="modal-footer">
-
-                              <input type="submit" value="Update" class="btn btn-primary" />
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
-
-
-                        </form>
-                              </div>
-                          </div>
-
-                      </div>
-                  </div>
-              </div>
 
 
 
@@ -571,14 +443,14 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                             <div class="modal-header">
-                                    <h5 class="modal-title">Add Basic Question</h5>
+                                    <h5 class="modal-title">Add Group Member</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                 </div>
                         <div class="modal-body">
                             <div class="container-fluid">
-                            <form method="post" action="{{ route('project.details.store', $project) }}" autocomplete="off">
+                            <form method="post" action="{{ route('project.group.store', $project) }}" autocomplete="off">
                           @csrf
                           @method('post')
                           <h6 class="heading-small text mb-4">Topic : {{ $project->project_topic  }}</h6>
@@ -588,100 +460,37 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                               <div class="form-group{{ $errors->has('project_details_desc') ? ' has-danger' : '' }} mb-3">
                               <div class="input-group input-group-alternative">
                                   <div class="input-group-prepend">
-                                      <span class="input-group-text"></span>
+                                      <span class="input-group-text"><i class="ni ni-circle-08    "></i></span>
                                   </div>
-                                  <textarea rows="20" cols="50" class="form-control{{ $errors->has('project_details_desc') ? ' is-invalid' : '' }}" placeholder="{{ __('Basic Question') }}" type="text" name="project_details_description" required autofocus ></textarea>
+                                  <input type="hidden" name="project_id" value={{$project->id}}>
+                                 <select class="form-control" name="identity_number" required >
+                                    <option value = "">-- Choose Student -- </option>
+                                    @foreach ($members as $m)
+                                    <option value="{{$m['identity_number']}}">{{$m['name']}}</option>
+                                    @endforeach
+                                 </select>
                               </div>
-                              @if ($errors->has('project_details_desc'))
-                                  <span class="invalid-feedback" style="display: block;" role="alert">
-                                      <strong>{{ $errors->first('project_details_desc') }}</strong>
-                                  </span>
-                              @endif
 
                               </div>
-
-                              <div class="form-row">
-                                <div class="col">
-                                    Start Time
-
-                                  <input type="datetime-local" class="form-control" name="project_details_start_time" value="{{$today}}" >
+                              <div class="form-group{{ $errors->has('kelompok_nomor') ? ' has-danger' : '' }} mb-3">
+                                <div class="input-group input-group-alternative">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-circle-08    "></i></span>
+                                    </div>
+                                    <select class ="form-control" name="kelompok_nomor" required>
+                                        @for ($i = 1; $i <= $project->project_group; $i++)
+                                            <option value={{$i}}>Kelompok {{$i}}</option>
+                                        @endfor
+                                        </select>
                                 </div>
-                                <div class="col">
-                                    End Time
-                                <input type="datetime-local" class="form-control" name="project_details_end_time" value= "{{$later}}">
+
+
                                 </div>
-                              </div>
-
-                              <input type="hidden" name="identity_number" value={{auth()->user()->identity_number}} />
-                              <input type="hidden" name="project_details_type" value="Basic Question"/>
 
 
 
 
-
-
-                              <div class="modal-footer">
-
-                            <input type="submit" value="Create" class="btn btn-primary" />
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              </div>
-
-
-                      </form>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal hide fade bd-example4-modal-lg" id="modelId4" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                            <div class="modal-header">
-                                    <h5 class="modal-title">Add New Phase</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                </div>
-                        <div class="modal-body">
-                            <div class="container-fluid">
-                            <form method="post" action="{{ route('project.details.store', $project) }}" autocomplete="off">
-                          @csrf
-                          @method('post')
-                            <h6 class="heading-small text mb-4">Phase {{count($project->project_details)}}</h6>
-
-
-
-                              <div class="form-group{{ $errors->has('project_details_desc') ? ' has-danger' : '' }} mb-3">
-                              <div class="input-group input-group-alternative">
-                                  <div class="input-group-prepend">
-                                      <span class="input-group-text"></span>
-                                  </div>
-                                  <textarea rows="20" cols="50" class="form-control{{ $errors->has('project_details_desc') ? ' is-invalid' : '' }}" placeholder="{{ __('Phase Description') }}" type="text" name="project_details_description" required autofocus ></textarea>
-                              </div>
-                              @if ($errors->has('project_details_desc'))
-                                  <span class="invalid-feedback" style="display: block;" role="alert">
-                                      <strong>{{ $errors->first('project_details_desc') }}</strong>
-                                  </span>
-                              @endif
-
-                              </div>
-
-                              <div class="form-row">
-                                <div class="col">
-                                    Start Time
-
-                                  <input type="datetime-local" class="form-control" name="project_details_start_time" value="{{$today}}" >
-                                </div>
-                                <div class="col">
-                                    End Time
-                                    <input type="datetime-local" class="form-control" name="project_details_end_time" value= "{{$later}}">
-                                </div>
-                              </div>
-
-                              <input type="hidden" name="identity_number" value={{auth()->user()->identity_number}} />
-                              <input type="hidden" name="project_details_type" value="Phase"/>
+                            <input type="hidden" name="project_id" value={{$project->id}} >
 
 
 
@@ -704,13 +513,13 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
             </div>
 
             <div class="table-responsive">
-              <table class="table align-items-center table-flush">
+              <table id="tabelmodel" class="table align-items-center table-flush">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col" class="sort" data-sort="name">Activity</th>
-                    <th scope="col" class="sort" data-sort="budget">Completion</th>
-                    <th scope="col" class="sort" data-sort="status">Start Time</th>
-                    <th scope="col" class="sort" data-sort="status">End Time</th>
+                    <th scope="col" class="sort" data-sort="name">Group</th>
+                    <th scope="col" class="sort" data-sort="budget">Member Name</th>
+                    <th scope="col" class="sort" data-sort="status">Identity Number</th>
+
                     {{-- <th scope="col">Users</th>
                     <th scope="col" class="sort" data-sort="completion">Completion</th> --}}
                     <th scope="col"></th>
@@ -718,80 +527,46 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                 </thead>
                 <tbody class="list">
 
-                @php
-                $no = 0 ;
-                @endphp
-                  @foreach ($project->project_details as $p)
-
-
+                  @php
+                    $cnt = 0 ;
+                  @endphp
+                  @foreach ($kelompok as $k)
                   <tr>
+
                     <th scope="row">
                       <div class="media align-items-center">
                         <div class="media-body">
-                            @if($p->project_details_type == "Phase")
-                          <span class="name mb-0 text-sm">{{$p->project_details_type}} {{++$no}}</span>
-                          @else
-                          <span class="name mb-0 text-sm">{{$p->project_details_type}}</span>
-                          @endif
+                          <span class="name mb-0 text-sm">{{$k->kelompok_nomor}}</span>
+
                         </div>
                       </div>
                     </th>
                     <th scope="row">
                         <div class="media align-items-center">
                           <div class="media-body">
-                            <span class="name mb-0 text-sm">Kosong</span>
+                            <span class="name mb-0 text-sm">{{$data[$cnt++]->name}}</span>
                           </div>
                         </div>
                       </th>
-                    <td>
+                    <th scope ="row">
                       <span class="badge badge-dot mr-4">
-                        {{$p->project_details_start_time}}
+                        {{$k->identity_number}}
                       </span>
-                    </td>
-                    <td>
-                        <span class="badge badge-dot mr-4">
-                          {{$p->project_details_end_time}}
-                        </span>
-                      </td>
-                    {{-- <td>
-                      <div class="avatar-group">
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                          <img alt="Image placeholder" src="../../assets/img/theme/team-1.jpg">
-                        </a>
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                          <img alt="Image placeholder" src="../../assets/img/theme/team-2.jpg">
-                        </a>
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                          <img alt="Image placeholder" src="../../assets/img/theme/team-3.jpg">
-                        </a>
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                          <img alt="Image placeholder" src="../../assets/img/theme/team-4.jpg">
-                        </a>
-
-                      </div>
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="completion mr-2">60%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td> --}}
+                    </th>
                     <td class="text-right">
                       <div class="dropdown">
                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <i class="fas fa-ellipsis-v"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <form id = "form1" action="{{ route('project.destroy', $project) }}" method="POST" style="display: inline-block;">
+
+                            <form id = "form" action="{{ route('project.group.destroy',$k) }}" onsubmit="return confirm('Are you sure you want to delete this member?');" method="POST" style="display: inline-block;">
+
                                 @csrf
-                                @method('DELETE')
-                                <a class ="dropdown-item" href="#" onclick="confirm('Are you sure you want to delete this project?')? document.getElementById('form1').submit(): '#' ;">Delete</a>
+                                @method('POST')
+                               <input type="submit" class="dropdown-item" value="Delete">
                                  </form>
-                          <a class="dropdown-item" href="{{route('project.details.index', $project)}}">Setting</a>
+
                         </div>
                       </div>
                     </td>
@@ -875,6 +650,7 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
   <!-- Argon JS -->
   <script src="../../assets/js/argon.js?v=1.2.0"></script>
   <script src="../../assets/js/modal.js"></script>
+
 </body>
 
 </html>

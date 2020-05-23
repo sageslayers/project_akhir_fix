@@ -39,8 +39,32 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
+        $count = User::where('account_type' , 'Siswa')->distinct()->get();
+        $count = $count->shuffle();
+        $cnt =  $count->count();
         $Project = $request->all();
-        Project::create($Project);
+        if ($Project['project_group'] > $cnt)
+         return back()->withStatus(__('Failed ! Groups must be less than total students'));
+
+        $hasil = Project::create($Project);
+        if($Project['randomGroup'] == "checkedValue" ){
+            $i = 1 ;
+
+            for ($j=0; $j < $cnt ; $j++) {
+                if($i > $Project['project_group'] ){
+                    $i = $i % $Project['project_group'] ;
+                }
+               $kelompok = new Kelompok ;
+               $kelompok->project_id = $hasil['id'] ;
+               $kelompok->kelompok_nomor = $i ;
+               $kelompok->identity_number = $count[$j]->identity_number ;
+               $i++;
+               $kelompok->save();
+            }
+
+
+        }
+
         return back()->withStatus(__('Data has been added'));
     }
 
@@ -75,7 +99,10 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+
+        $project->update($request -> all());
+        return back()->withStatus(__('Data has been updated'));
+
     }
 
     /**

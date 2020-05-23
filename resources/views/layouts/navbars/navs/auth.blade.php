@@ -20,7 +20,12 @@
                 <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="media align-items-center">
                         <span class="avatar avatar-sm rounded-circle">
-                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/brand/{{ auth()->user()->avatar }}">
+                            @if(session('tmp_img'))
+
+                            <img alt="Image placeholder" src="{{ session('tmp_img') }}">
+                            @else
+                            <img alt="Image placeholder" src="{{ auth()->user()->avatar }}">
+                                @endif
                         </span>
                         <div class="media-body ml-2 d-none d-lg-block">
                             <span class="mb-0 text-sm  font-weight-bold">{{ auth()->user()->name }}</span>
