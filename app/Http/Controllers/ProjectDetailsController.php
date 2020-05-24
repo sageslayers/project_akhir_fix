@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Project ;
 use App\Project_Details ;
 use App\Kelompok;
+use App\Project_File ;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File;
 
 class ProjectDetailsController extends Controller
 {
@@ -42,13 +45,15 @@ class ProjectDetailsController extends Controller
             return back()->withStatus(__('Total Phase exceed maximum'));
         }
         $ProjectDetails = $request->all();
-        // $ProjectDetails->project_id = $project->project_id ;
-        // $ProjectDetails->project_details_desc = $request->project_details_desc;
-        // $ProjectDetails->project_details_start_time = $request->project_details_start_time ;
-        // $ProjectDetails->project_details_end_time = $request->project_details_end_time ;
         $ProjectDetails['project_id'] = $project->id ;
-
-        Project_Details::create($ProjectDetails);
+        $x = Project_Details::create($ProjectDetails);
+        // dd($request->file('attachment'));
+        $path = Storage::putFile('public/attachments', $request->file('attachment'));
+        // dd($request);
+        $file = new Project_File ;
+        $file->project_details_id = $x->project_details_id ;
+        $file->project_file_link = Storage::url($path);
+        $file->save();
         Project::where('id' , $project->id)->update(['project_has_question' => 1]);
         return back()->withStatus(__('Data has been added'));
     }
@@ -95,6 +100,6 @@ class ProjectDetailsController extends Controller
      */
     public function destroy(Project_Details $project_Details)
     {
-        //
+
     }
 }

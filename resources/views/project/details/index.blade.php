@@ -578,7 +578,7 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                                 </div>
                         <div class="modal-body">
                             <div class="container-fluid">
-                            <form method="post" action="{{ route('project.details.store', $project) }}" autocomplete="off">
+                            <form method="post" action="{{ route('project.details.store', $project) }}" enctype="multipart/form-data" autocomplete="off">
                           @csrf
                           @method('post')
                           <h6 class="heading-small text mb-4">Topic : {{ $project->project_topic  }}</h6>
@@ -599,7 +599,8 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                               @endif
 
                               </div>
-
+                              Attachment
+                              <input type="file" class="form-control" name="attachment" >
                               <div class="form-row">
                                 <div class="col">
                                     Start Time
@@ -708,7 +709,7 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                 <thead class="thead-light">
                   <tr>
                     <th scope="col" class="sort" data-sort="name">Activity</th>
-                    <th scope="col" class="sort" data-sort="budget">Completion</th>
+                    <th scope="col" class="sort" data-sort="budget">Group Progress</th>
                     <th scope="col" class="sort" data-sort="status">Start Time</th>
                     <th scope="col" class="sort" data-sort="status">End Time</th>
                     {{-- <th scope="col">Users</th>
@@ -739,7 +740,7 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                     <th scope="row">
                         <div class="media align-items-center">
                           <div class="media-body">
-                            <span class="name mb-0 text-sm">Kosong</span>
+                            <span class="name mb-0 text-sm">1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25</span>
                           </div>
                         </div>
                       </th>

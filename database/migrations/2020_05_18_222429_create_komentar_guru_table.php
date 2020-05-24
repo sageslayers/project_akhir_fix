@@ -15,8 +15,8 @@ class CreateKomentarGuruTable extends Migration
     {
         Schema::create('komentar_guru', function (Blueprint $table) {
             $table->bigIncrements('komentar_guru_id');
-            $table->integer('project_details_id');
-            $table->foreign('project_details_id')->references('project_details_id')->on('project_details')->onDelete('cascade') ;
+            $table->unsignedBigInteger('project_details_id');
+            $table->foreign('project_details_id')->references('id')->on('project_details')->onDelete('cascade') ;
             $table->string('komentar_guru_desc');
             $table->string('identity_number');
             $table->foreign('identity_number')->references('identity_number')->on('users')->onDelete('cascade')->onUpdate('cascade') ;

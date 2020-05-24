@@ -18,6 +18,7 @@ class UsersDetailsController extends Controller
         $request->validate([
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
           ]);
+        dd($request->file('avatar'));
         $path = Storage::putFile('public/avatars', $request->file('avatar'));
         $user = User::find(auth()->user()->id);
         $user->avatar = Storage::url($path);

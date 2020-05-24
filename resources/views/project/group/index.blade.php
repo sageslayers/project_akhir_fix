@@ -23,7 +23,7 @@ $day = date('d');
 $year = date('Y');
 $hour = date('h');
 $minute = date('i');
-$today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
+$today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>;
 
 <!DOCTYPE html>
 <html>
@@ -561,7 +561,6 @@ $today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
                             <form id = "form" action="{{ route('project.group.destroy',$k) }}" onsubmit="return confirm('Are you sure you want to delete this member?');" method="POST" style="display: inline-block;">
-
                                 @csrf
                                 @method('POST')
                                <input type="submit" class="dropdown-item" value="Delete">

@@ -14,10 +14,10 @@ class CreateProjectFileTable extends Migration
     public function up()
     {
         Schema::create('project_file', function (Blueprint $table) {
-            $table->bigIncrements('project_file_id');
-            $table->integer('project_details_id');
-            $table->foreign('project_details_id')->references('project_details_id')->on('project_details')->onDelete('cascade') ;
-            $table->string('project_file_link',50);
+            $table->id();
+            $table->unsignedBigInteger('project_details_id');
+            $table->foreign('project_details_id')->references('id')->on('project_details')->onDelete('cascade')->onUpdate('cascade') ;
+            $table->string('project_file_link',255);
             $table->timestamps();
         });
     }

@@ -15,11 +15,12 @@ class CreateKelompokTable extends Migration
     {
         Schema::dropIfExists('kelompok');
         Schema::create('kelompok', function (Blueprint $table) {
-            $table->bigIncrements('kelompok_id');
-            $table->integer('project_id');
-            $table->foreign('project_id')->references('project_id')->on('project')->onDelete('cascade')->onUpdate('cascade') ;
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('project_id');
+            $table->foreign('project_id')->references('id')->on('project')->onDelete('cascade')->onUpdate('cascade') ;
             $table->string('kelompok_nomor',4);
             $table->string('identity_number');
+            $table->timestamp();
             $table->foreign('identity_number')->references('identity_number')->on('users')->onDelete('cascade')->onUpdate('cascade') ;
         });
     }
