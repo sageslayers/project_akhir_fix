@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Project ;
+use App\Project_Details ;
 use App\Kelompok ;
 use App\User ;
-
+use App\Kelompok_Detail;
+use App\Nilai_Individu ;
 class ProjectController extends Controller
 {
     /**
@@ -16,8 +18,29 @@ class ProjectController extends Controller
      */
     public function index()
     {
+        $user = User::get();
+        if (auth()->user()->account_type == "Siswa") {
+
+        $time  = date('Y-m-d\Th:i');
+            $t = Project::join('project_details','project.id' ,'=','project_details.project_id')
+            ->where('project_details_start_time','<=' , $time )
+            //  ->where('project_details_end_time','>=', $time)
+
+            ->get();
+        $project_details = Project_Details::get();
+        $project = Project::join('kelompok','kelompok.project_id' , '=' ,'project.id')
+        ->join('kelompok_detail','kelompok.id','=','kelompok_detail.kelompok_id')
+        ->join('users','kelompok_detail.identity_number','=','users.identity_number')
+        ->where('kelompok_detail.identity_number',auth()->user()->identity_number)
+        ->where('project.project_status' , '!=' ,"pending" )
+        ->select('project.*','kelompok.kelompok_nomor','users.name')
+        ->orderByDesc('project.created_at')
+        ->get();
+
+        return view('project.indexsiswa',compact('project','user','project_details','t'));
+        }
         $project = Project::where('identity_number', auth()->user()->identity_number)->orderBy('id', 'desc')->orderBy('project_status', 'desc')->get();
-        return view('project.index',compact('project'));
+        return view('project.index',compact('project','user'));
     }
 
     /**
@@ -47,19 +70,34 @@ class ProjectController extends Controller
          return back()->withStatus(__('Failed ! Groups must be less than total students'));
 
         $hasil = Project::create($Project);
+
+        for($i = 1 ; $i <= $Project['project_group'] ; $i++){
+            $kelompok = new Kelompok ;
+            $kelompok->project_id = $hasil['id'] ;
+            $kelompok->kelompok_nomor = $i ;
+            $kelompok->save();
+        }
+        for ($j=0; $j < $cnt ; $j++) {
+        $nilai_individu = new Nilai_Individu ;
+        $nilai_individu->project_id = $hasil['id'] ;
+        $nilai_individu->identity_number = $count[$j]->identity_number;
+        $nilai_individu->save();
+        }
         if($Project['randomGroup'] == "checkedValue" ){
-            $i = 1 ;
+
+        $i = 1;
 
             for ($j=0; $j < $cnt ; $j++) {
                 if($i > $Project['project_group'] ){
                     $i = $i % $Project['project_group'] ;
                 }
-               $kelompok = new Kelompok ;
-               $kelompok->project_id = $hasil['id'] ;
-               $kelompok->kelompok_nomor = $i ;
-               $kelompok->identity_number = $count[$j]->identity_number ;
+               $kelompok_id = Kelompok::where('kelompok_nomor',$i)->where('project_id',$hasil['id'])->pluck('id')->first();
+               $kelompok_detail = new Kelompok_Detail ;
+               $kelompok_detail->kelompok_id = $kelompok_id ;
+               $kelompok_detail->identity_number = $count[$j]->identity_number ;
                $i++;
-               $kelompok->save();
+               $kelompok_detail->save();
+
             }
 
 

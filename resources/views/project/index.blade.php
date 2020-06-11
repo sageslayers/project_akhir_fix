@@ -18,7 +18,7 @@
 $dateOfBirth = auth()->user()->users_details->users_details_birth ;
 $years = \Carbon\Carbon::parse($dateOfBirth)->age;
 $detail = auth()->user()->users_details;
-// dd($project);
+
 ?>
 
 <!DOCTYPE html>
@@ -26,79 +26,14 @@ $detail = auth()->user()->users_details;
 
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
-    <meta name="author" content="Creative Tim">
-    <title>LearnQ</title>
-    <!-- Favicon -->
-    <link rel="icon" href="../assets/img/brand/favicon.png" type="image/png">
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-    <!-- Icons -->
-    <link rel="stylesheet" href="../assets/vendor/nucleo/css/nucleo.css" type="text/css">
-    <link rel="stylesheet" href="../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
-    <!-- Argon CSS -->
-    <link rel="stylesheet" href="../assets/css/argon.css?v=1.2.0" type="text/css">
-</head>
+    <head>
 
-<body>
-    <!-- Sidenav -->
-    <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
-        <div class="scrollbar-inner">
-            <!-- Brand -->
-            <div class="sidenav-header  align-items-center">
-                <a class="navbar-brand" href="javascript:void(0)">
-                    <img src="../assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
-                </a>
-            </div>
-            <div class="navbar-inner">
-                <!-- Collapse -->
-                <div class="collapse navbar-collapse" id="sidenav-collapse-main">
-                    <!-- Nav items -->
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">
-                                <i class="ni ni-tv-2 text-primary"></i> {{ __('Dashboard') }}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#navbar-examples" data-toggle="collapse" role="button"
-                                aria-expanded="true" aria-controls="navbar-examples">
-                                <i class="ni ni-circle-08"></i>
-                                <span class="nav-link-text">{{ __('Manage Profile') }}</span>
+        @include('project.header')
+    </head>
 
-                            </a>
-
-                            <div class="collapse" id="navbar-examples">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('profile.edit') }}">
-                                            {{ __('User profile') }}
-                                        </a>
-
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{{ route('project.index') }}">
-                                <i class="ni ni-atom"></i>
-                                <span class="nav-link-text">{{ __('Manage Project') }}</span>
-                            </a>
-                        </li>
-
-
-
-                    </ul>
-                    <!-- Divider -->
-                    <hr class="my-3">
-                    <!-- Heading -->
-
-                </div>
-            </div>
-        </div>
-    </nav>
+    <body>
+      <!-- Sidenav -->
+     @include('project.sidebar')
     <!-- Main content -->
     <div class="main-content" id="panel">
         <!-- Topnav -->
@@ -344,11 +279,17 @@ $detail = auth()->user()->users_details;
                                     <span>Support</span>
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a href="#!" class="dropdown-item">
-                                    <i class="ni ni-user-run"></i>
-                                    <span>Logout</span>
-                                </a>
-                            </div>
+                                <form id = "logout-form"action="{{route('logout')}}" method="post">
+                                        @method('POST')
+                                        @csrf
+                                        <button onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();" class="dropdown-item">
+                                            <i class="ni ni-user-run"></i>
+                                            <span>Logout</span>
+                                          </a>
+                                    </form>
+
+                                  </div>
                         </li>
                     </ul>
                 </div>
@@ -643,9 +584,12 @@ $detail = auth()->user()->users_details;
                                                 @elseif($p->project_status == "complete")
                                                 <i class="bg-success"></i>
                                                 <span class="status">Complete</span>
-                                                @else
+                                                @elseif($p->project_status=="running")
                                                 <i class="bg-info"></i>
                                                 <span class="status">Running</span>
+                                                @elseif($p->project_status == "final")
+                                                <i class="bg-info"></i>
+                                                <span class="status">Individual Assignment</span>
                                                 @endif
 
                                             </span>

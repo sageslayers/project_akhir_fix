@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProjectFileTable extends Migration
+class CreateQuestionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateProjectFileTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_file', function (Blueprint $table) {
+        Schema::create('question', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('project_details_id');
-            $table->foreign('project_details_id')->references('id')->on('project_details')->onDelete('cascade')->onUpdate('cascade') ;
-            $table->string('project_file_link',255);
+            $table->unsignedBigInteger('quiz_id');
+            $table->foreign('quiz_id')->references('id')->on('quiz')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('answer_id');
+            $table->string('desc');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateProjectFileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('project_file');
+        Schema::dropIfExists('question');
     }
 }

@@ -14,30 +14,28 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
 <?php
-
 $dateOfBirth = auth()->user()->users_details->users_details_birth ;
 $years = \Carbon\Carbon::parse($dateOfBirth)->age;
 $detail = auth()->user()->users_details;
-$month = date('m');
-$day = date('d');
-$year = date('Y');
-$hour = date('h');
-$minute = date('i');
-$today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
+
+$today = date('Y-m-d\Th:i');
+$futureDate = mktime(date('h'), date('i'), 0, date("m"), date("d")+7, date("Y"));
+$later =  date("Y-m-d\Th:i", $futureDate);
+
+?>
 
 <!DOCTYPE html>
 <html>
 
 
 <head>
-    <head>
 
-        @include('project.header')
-    </head>
+    @include('project.header')
+</head>
 
-    <body>
-      <!-- Sidenav -->
-     @include('project.sidebar')
+<body>
+  <!-- Sidenav -->
+ @include('project.sidebar')
   <!-- Main content -->
   <div class="main-content" id="panel">
     <!-- Topnav -->
@@ -297,23 +295,18 @@ $today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                   <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                  <li class="breadcrumb-item"><a href="{{route('project.index')}}">Project</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">{{$project->id}}</li>
+                  <li class="breadcrumb-item active" aria-current="page"><a href="{{route('project.index')}}">Project</a></li>
                 </ol>
               </nav>
             </div>
             <div class="col-lg-6 col-5 text-right">
               <!-- Button trigger modal -->
 
-              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example2-modal-lg">
-                <i class="ni ni-fat-add"></i> Add Member
-                </button>
 
               <!-- Modal -->
 
 
 
-              <a href="#" class="btn btn-sm btn-neutral">Filters</a>
             </div>
           </div>
         </div>
@@ -326,7 +319,7 @@ $today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
           <div class="card">
             <!-- Card header -->
             <div class="card-header border-0">
-              <h3 class="mb-0">Topic :  {{$project->project_topic}}</h3>
+              <h3 class="mb-0">Welcome {{auth()->user()->name}}  </h3>
 
 
            <!-- Modal -->
@@ -362,89 +355,23 @@ $today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
 
 
 
-              <div class="modal hide fade bd-example2-modal-lg" id="modelId3" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                            <div class="modal-header">
-                                    <h5 class="modal-title">Add Group Member</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                </div>
-                        <div class="modal-body">
-                            <div class="container-fluid">
-                            <form method="post" action="{{ route('project.group.store', $project) }}" autocomplete="off">
-                          @csrf
-                          @method('post')
-                          <h6 class="heading-small text mb-4">Topic : {{ $project->project_topic  }}</h6>
-
-
-
-                              <div class="form-group{{ $errors->has('project_details_desc') ? ' has-danger' : '' }} mb-3">
-                              <div class="input-group input-group-alternative">
-                                  <div class="input-group-prepend">
-                                      <span class="input-group-text"><i class="ni ni-circle-08    "></i></span>
-                                  </div>
-                                  <input type="hidden" name="project_id" value={{$project->id}}>
-                                 <select class="form-control" name="identity_number" required >
-                                    <option value = "">-- Choose Student -- </option>
-                                    @foreach ($members as $m)
-                                    <option value="{{$m['identity_number']}}">{{$m['name']}}</option>
-                                    @endforeach
-                                 </select>
-                              </div>
-
-                              </div>
-                              <div class="form-group{{ $errors->has('kelompok_nomor') ? ' has-danger' : '' }} mb-3">
-                                <div class="input-group input-group-alternative">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="ni ni-circle-08    "></i></span>
-                                    </div>
-                                    <select class ="form-control" name="kelompok_id" required>
-                                        @for ($i = 1; $i <= $project->project_group; $i++)
-                                            <option value={{$kelompok->where('kelompok_nomor',$i)->where('project_id',$project->id)->pluck('id')->first() }}>Kelompok {{$i}}</option>
-                                        @endfor
-                                        </select>
-                                </div>
-
-
-                                </div>
 
 
 
 
 
 
-
-
-
-
-
-                              <div class="modal-footer">
-
-                            <input type="submit" value="Create" class="btn btn-primary" />
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              </div>
-
-
-                      </form>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
 
             <div class="table-responsive">
-              <table id="tabelmodel" class="table align-items-center table-flush">
+              <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col" class="sort" data-sort="name">Group</th>
-                    <th scope="col" class="sort" data-sort="budget">Member Name</th>
-                    <th scope="col" class="sort" data-sort="status">Identity Number</th>
-                    <th scope="col" class="sort" data-sort="status">Individual Score</th>
-                    <th scope="col" class="sort" data-sort="status">Group Score (Avg)</th>
-
+                    <th scope="col" class="sort" data-sort="name">Project Topic</th>
+                    <th scope="col" class="sort" data-sort="name">Instructor</th>
+                    <th scope="col" class="sort" data-sort="budget">Status</th>
+                    <th scope="col" class="sort" data-sort="budget">Your Group</th>
+                    <th scope="col" class="sort" data-sort="status">Start Time</th>
+                    <th scope="col" class="sort" data-sort="status">End Time</th>
                     {{-- <th scope="col">Users</th>
                     <th scope="col" class="sort" data-sort="completion">Completion</th> --}}
                     <th scope="col"></th>
@@ -452,44 +379,97 @@ $today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
                 </thead>
                 <tbody class="list">
 
-                  @php
-                    $cnt = 0 ;
-                  @endphp
-                  @foreach ($kelompok as $kel)
-                   @foreach ($kel->kelompok_detail as $k)
+                @php
+                $no = 0 ;
+                @endphp
+                  @foreach ($project as $p)
+                    @php
+
+                    @endphp
 
                   <tr>
-
                     <th scope="row">
                       <div class="media align-items-center">
                         <div class="media-body">
-                          <span class="name mb-0 text-sm">{{$kel->kelompok_nomor}}</span>
-
+                          <span class="name mb-0 text-sm">{{$p->project_topic}}</span>
                         </div>
                       </div>
                     </th>
                     <th scope="row">
                         <div class="media align-items-center">
                           <div class="media-body">
-                            <span class="name mb-0 text-sm">{{$data[$cnt++]->name}}</span>
+                            <span class="name mb-0 text-sm">{{$user->where('identity_number',$p->identity_number)->pluck('name')->first()}}</span>
                           </div>
                         </div>
                       </th>
-                    <th scope ="row">
+                      <td>
+                        <span class="badge badge-dot mr-4">
+                            @if($p->project_status == "pending")
+                            <i class="bg-warning"></i>
+                            <span class="status">Pending</span>
+                            @elseif($p->project_status == "complete")
+                            <i class="bg-success"></i>
+                            <span class="status">Complete</span>
+                            @elseif($p->project_status=="running")
+
+
+                        @if (strtotime($t->where('project_id',$p->id)->pluck('project_details_end_time')->last()) < strtotime($today))
+                        <i class="bg-warning"></i>
+                        <span class="bg-warning">Expired ({{$t->where('project_id',$p->id)->pluck('project_details_type')->last()}})</span>
+                        @else
+                        <i class="bg-info"></i>
+                        <span class="status">Running ({{$t->where('project_id',$p->id)->pluck('project_details_type')->last()}})</span>
+                        @endif
+                            @elseif($p->project_status == "final")
+                            <i class="bg-info"></i>
+                            <span class="status">Individual Assignment</span>
+                            @endif
+
+                        </span>
+                      </td>
+                    <td>
                       <span class="badge badge-dot mr-4">
-                        {{$k->identity_number}}
+                        {{$p->kelompok_nomor}}
                       </span>
-                    </th>
-                    <th scope ="row">
+                    </td>
+                    <td>
                         <span class="badge badge-dot mr-4">
-                          {{$nilai_individu->where('identity_number',$k->identity_number)->where('project_id',$project->id)->pluck('nilai')->first()  }}
+                          {{$t->where('project_id',$p->id)->pluck('project_details_start_time')->last()}}
                         </span>
-                      </th>
-                      <th scope ="row">
+                      </td>
+                      <td>
                         <span class="badge badge-dot mr-4">
-                          {{$nilai_kelompok->where('kelompok_id',$kel->id)->avg('nilai')}}
+                            {{$t->where('project_id',$p->id)->pluck('project_details_end_time')->last()}}
                         </span>
-                      </th>
+                      </td>
+                    {{-- <td>
+                      <div class="avatar-group">
+                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                          <img alt="Image placeholder" src="../../assets/img/theme/team-1.jpg">
+                        </a>
+                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                          <img alt="Image placeholder" src="../../assets/img/theme/team-2.jpg">
+                        </a>
+                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                          <img alt="Image placeholder" src="../../assets/img/theme/team-3.jpg">
+                        </a>
+                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                          <img alt="Image placeholder" src="../../assets/img/theme/team-4.jpg">
+                        </a>
+
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <span class="completion mr-2">60%</span>
+                        <div>
+                          <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td> --}}
+                    {{-- {{dd($project)}}; --}}
                     <td class="text-right">
                       <div class="dropdown">
                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -497,17 +477,11 @@ $today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-                            <form id = "form" action="{{ route('project.group.destroy',$k) }}" onsubmit="return confirm('Are you sure you want to delete this member?');" method="POST" style="display: inline-block;">
-                                @csrf
-                                @method('POST')
-                               <input type="submit" class="dropdown-item" value="Delete">
-                                 </form>
-
+                            <a class="dropdown-item" href="{{route('project.details.index',$p)}}">Do Assignment</a>
                         </div>
                       </div>
                     </td>
                   </tr>
-                  @endforeach
                   @endforeach
                 </tbody>
               </table>
@@ -587,7 +561,6 @@ $today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
   <!-- Argon JS -->
   <script src="../../assets/js/argon.js?v=1.2.0"></script>
   <script src="../../assets/js/modal.js"></script>
-
 </body>
 
 </html>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNilaiTable extends Migration
+class CreateQuizTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateNilaiTable extends Migration
      */
     public function up()
     {
-        Schema::create('nilai', function (Blueprint $table) {
+        Schema::create('quiz', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('project_id');
             $table->foreign('project_id')->references('id')->on('project')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('identity_number');
-            $table->foreign('identity_number')->references('identity_number')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('nilai');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateNilaiTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nilai');
+        Schema::dropIfExists('quiz');
     }
 }

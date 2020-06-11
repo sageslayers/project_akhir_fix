@@ -17,4 +17,7 @@ class Kelompok extends Model
      public function Project(){
         return $this->belongsTo('App\Project');
     }
+    public function Kelompok_Detail(){
+        return $this->hasMany('App\Kelompok_Detail');
+    }
 }

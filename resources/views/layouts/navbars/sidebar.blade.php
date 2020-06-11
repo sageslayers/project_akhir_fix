@@ -100,12 +100,21 @@
                         </ul>
                     </div>
                 </li>
+                @if(auth()->user()->account_type == "Guru")
                 <li class="nav-item">
-                <a class="nav-link" href="{{ route('project.index') }}">
+                <a class="nav-link active" href="{{ route('project.index') }}">
                         <i class="ni ni-atom" ></i>
                         <span class="nav-link-text" >{{ __('Manage Project') }}</span>
                     </a>
                 </li>
+                @else
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ route('project.index') }}">
+                            <i class="ni ni-atom" ></i>
+                            <span class="nav-link-text" >{{ __('Project List') }}</span>
+                        </a>
+                </li>
+                @endif
 
 
             </ul>

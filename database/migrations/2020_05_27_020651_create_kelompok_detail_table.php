@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKomentarGuruTable extends Migration
+class CreateKelompokDetailTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateKomentarGuruTable extends Migration
      */
     public function up()
     {
-        Schema::create('komentar_guru', function (Blueprint $table) {
-            $table->bigIncrements('komentar_guru_id');
-            $table->unsignedBigInteger('project_details_id');
-            $table->foreign('project_details_id')->references('id')->on('project_details')->onDelete('cascade') ;
-            $table->string('komentar_guru_desc');
+        Schema::create('kelompok_detail', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('kelompok_id');
+            $table->foreign('kelompok_id')->references('id')->on('kelompok')->onDelete('cascade')->onUpdate('cascade') ;
             $table->string('identity_number');
             $table->foreign('identity_number')->references('identity_number')->on('users')->onDelete('cascade')->onUpdate('cascade') ;
             $table->timestamps();
@@ -31,6 +30,6 @@ class CreateKomentarGuruTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('komentar_guru');
+        Schema::dropIfExists('kelompok_detail');
     }
 }

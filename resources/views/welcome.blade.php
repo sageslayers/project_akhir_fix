@@ -6,8 +6,8 @@
             <div class="header-body text-center mt-7 mb-7">
                 <div class="row justify-content-center">
                     <div class="col-lg-5 col-md-6">
-                        <h1 class="text-white">{{ __('Selamat Datang di LEARNQ ') }}</h1>
-                        <h1 class="text-white">{{ __('Portal Pembelajaran Berbasis Project.') }}</h1>
+                        <h1 class="text-white">{{ __('Welcome To LearnQ ') }}</h1>
+                      <h1 class="text-white">{{ __('Project Based Learning Portal') }}</h1>
                     </div>
                 </div>
             </div>

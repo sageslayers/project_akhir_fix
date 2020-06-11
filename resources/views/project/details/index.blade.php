@@ -14,21 +14,20 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
 <?php
-
 $dateOfBirth = auth()->user()->users_details->users_details_birth ;
 $years = \Carbon\Carbon::parse($dateOfBirth)->age;
 $detail = auth()->user()->users_details;
-$month = date('m');
-$day = date('d');
-$day2 = $day+7;
-$year = date('Y');
-$hour = date('h');
-$minute = date('i');
-$a = date('A');
-// dd($project);
-$today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;
-$later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
 
+if($pd_time == null ) {
+   $pd_time  = date('Y-m-d\Th:i');
+}
+else {
+
+    $pd_time = date('Y-m-d\Th:i',strtotime($pd_time));
+}
+$today = $pd_time;
+$later = strtotime("+7 day",strtotime($today));
+$later = date('Y-m-d\Th:i',$later);
 ?>
 
 <!DOCTYPE html>
@@ -36,93 +35,13 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
 
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
-  <meta name="author" content="Creative Tim">
-  <title>LearnQ</title>
-  <!-- Favicon -->
-  <link rel="icon" href="../../assets/img/brand/favicon.png" type="image/png">
-  <!-- Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-  <!-- Icons -->
-  <link rel="stylesheet" href="../../assets/vendor/nucleo/css/nucleo.css" type="text/css">
-  <link rel="stylesheet" href="../../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
-  <!-- Argon CSS -->
-  <link rel="stylesheet" href="../../assets/css/argon.css?v=1.2.0" type="text/css">
+
+    @include('project.header')
 </head>
 
 <body>
   <!-- Sidenav -->
-  <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
-    <div class="scrollbar-inner">
-      <!-- Brand -->
-      <div class="sidenav-header  align-items-center">
-        <a class="navbar-brand" href="javascript:void(0)">
-          <img src="../../assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
-        </a>
-      </div>
-      <div class="navbar-inner">
-        <!-- Collapse -->
-        <div class="collapse navbar-collapse" id="sidenav-collapse-main">
-          <!-- Nav items -->
-          <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
-                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Dashboard') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-examples">
-                        <i class="ni ni-circle-08" ></i>
-                        <span class="nav-link-text" >{{ __('Manage Profile') }}</span>
-
-                    </a>
-
-                    <div class="collapse" id="navbar-examples">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('profile.edit') }}">
-                                    {{ __('User profile') }}
-                                </a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link active" href="{{ route('project.index') }}">
-                        <i class="ni ni-atom" ></i>
-                        <span class="nav-link-text" >{{ __('Manage Project') }}</span>
-                    </a>
-                </li>
-
-                <li class="nav-item ">
-                    <a class="nav-link" href="{{ route('map') }}">
-                        <i class="ni ni-pin-3 text-orange"></i> {{ __('Maps') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('table') }}">
-                      <i class="ni ni-bullet-list-67 text-default"></i>
-                      <span class="nav-link-text">Tables</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="ni ni-circle-08 text-pink"></i> {{ __('Register') }}
-                    </a>
-                </li>
-
-            </ul>
-          <!-- Divider -->
-          <hr class="my-3">
-          <!-- Heading -->
-
-        </div>
-      </div>
-    </div>
-  </nav>
+ @include('project.sidebar')
   <!-- Main content -->
   <div class="main-content" id="panel">
     <!-- Topnav -->
@@ -355,10 +274,16 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                   <span>Support</span>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#!" class="dropdown-item">
-                  <i class="ni ni-user-run"></i>
-                  <span>Logout</span>
-                </a>
+            <form id = "logout-form"action="{{route('logout')}}" method="post">
+                    @method('POST')
+                    @csrf
+                    <button onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();" class="dropdown-item">
+                        <i class="ni ni-user-run"></i>
+                        <span>Logout</span>
+                      </a>
+                </form>
+
               </div>
             </li>
           </ul>
@@ -383,17 +308,77 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
             </div>
             <div class="col-lg-6 col-5 text-right">
               <!-- Button trigger modal -->
-              @if($project->project_has_question)
+
+              @if(count($project->project_details) == $project->project_phase )
               <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example4-modal-lg">
               <i class="ni ni-fat-add"></i> New Phase
               </button>
-              @else
+              @elseif($project->project_status == "pending")
               <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example2-modal-lg">
                 <i class="ni ni-fat-add"></i> Set up Question
                 </button>
+              @elseif( $project->project_status == "running" )
+              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-assignment-modal-lg">
+                <i class="ni ni-fat-add"></i> Give Individual Assignment
+                </button>
               @endif
               <!-- Modal -->
+                <!-- Button trigger modal -->
 
+
+                <!-- Modal -->
+                <div class="modal hide fade bd-assignment-modal-lg"  id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Individual Quiz</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action = "{{route('project.quiz.store',$project)}}" method = "post" >
+                                    @CSRF
+                                    @method("POST")
+                                <div class="field_wrapper">
+
+                                    <div class="input-group input-group-alternative">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><strong>{{__('1.')}}</strong> </span>
+
+                                        </div>
+
+                                        <input class="form-control" placeholder="{{ __('Question') }}" value="" type="text" name="pertanyaan[]" required autofocus>
+                                    </div>
+                                    <div class="attachmentDiv">
+
+                                    </div>
+                            <div class ="form-row">
+                                <div class="col">
+                                    <input type="text" class ="form-control" name="jawaban[]" placeholder="Answer" value=""/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class ="form-control" name="pengecoh1[]" placeholder="Distractor" value=""/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class ="form-control" name="pengecoh2[]" placeholder="Distractor" value=""/>
+                                </div>
+                                <div class="col">
+                                    <input type="text" class ="form-control" name="pengecoh3[]" placeholder="Distractor" value=""/>
+                                </div>
+                            </div>
+                            <a href="javascript:void(0);" class="add_button" title="Add field"><img src="../../assets/img/icons/add.png" width="25"/></a>
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                               <input type="submit" class="btn btn-primary" value="Save" >
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
               <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example3-modal-lg">
@@ -600,7 +585,7 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
 
                               </div>
                               Attachment
-                              <input type="file" class="form-control" name="attachment" >
+                              <input type="file" class="form-control" required name="project_details_link" >
                               <div class="form-row">
                                 <div class="col">
                                     Start Time
@@ -647,7 +632,7 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                                 </div>
                         <div class="modal-body">
                             <div class="container-fluid">
-                            <form method="post" action="{{ route('project.details.store', $project) }}" autocomplete="off">
+                            <form method="post" action="{{ route('project.details.store', $project) }}" enctype="multipart/form-data" autocomplete="off" >
                           @csrf
                           @method('post')
                             <h6 class="heading-small text mb-4">Phase {{count($project->project_details)}}</h6>
@@ -668,9 +653,11 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                               @endif
 
                               </div>
-
+                              Attachment
+                              <input type="file" class="form-control" required name="project_details_link" >
                               <div class="form-row">
                                 <div class="col">
+
                                     Start Time
 
                                   <input type="datetime-local" class="form-control" name="project_details_start_time" value="{{$today}}" >
@@ -682,7 +669,7 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                               </div>
 
                               <input type="hidden" name="identity_number" value={{auth()->user()->identity_number}} />
-                              <input type="hidden" name="project_details_type" value="Phase"/>
+                              <input type="hidden" name="project_details_type" value="Phase {{count($project->project_details)}}"/>
 
 
 
@@ -710,6 +697,7 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                   <tr>
                     <th scope="col" class="sort" data-sort="name">Activity</th>
                     <th scope="col" class="sort" data-sort="budget">Group Progress</th>
+                    <th scope="col" class="sort" data-sort="budget">Attachment</th>
                     <th scope="col" class="sort" data-sort="status">Start Time</th>
                     <th scope="col" class="sort" data-sort="status">End Time</th>
                     {{-- <th scope="col">Users</th>
@@ -740,10 +728,126 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                     <th scope="row">
                         <div class="media align-items-center">
                           <div class="media-body">
-                            <span class="name mb-0 text-sm">1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25</span>
+                            <span class="name mb-0 text-sm">
+                                @for ($i = 1; $i <= $project->project_group; $i++)
+                                    <!-- Button trigger modal -->
+                                    @php
+
+                                    $kel_id = $project->kelompok->where('project_id',$project->id)
+                                    ->where('kelompok_nomor',$i)->pluck('id')->first();
+
+                                    $nilai = $nilai_kelompok
+                                                ->where('kelompok_id',$kel_id)
+                                                ->where('project__details_id',$p->id)
+                                                ->pluck('nilai')->first();
+                                    // dd($nilai);
+                                    // echo ($nilai);
+                                    @endphp
+                                    @if($nilai == 0 )
+                                    <a href="#" style="color: red;" data-toggle="modal" data-target="#modelIdGroup{{$p->id}}{{$i}}">{{$i}}</a>
+                                    @else
+                                    <a href="#" style="color: green;" data-toggle="modal" data-target="#modelIdGroup{{$p->id}}{{$i}}">{{$i}}</a>
+                                    @endif
+                                    <!-- Modal -->
+
+                                    <div class="modal fade" id="modelIdGroup{{$p->id}}{{$i}}" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">{{$p->project_details_type}} : Kelompok {{$i}} </h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                </div>
+
+                                                <div class="modal-body" >
+                                                    <blockquote class="blockquote">
+                                                        <p class="mb-0"></p>
+                                                        <footer class="blockquote-footer"> <cite title="Source Title">Anggota</cite></footer>
+                                                    </blockquote>
+                                                    @foreach ($project->kelompok->where('kelompok_nomor', $i) as $kel)
+                                                        @foreach ($kel->kelompok_detail as $k)
+                                                        @php
+                                                            $x = $user->where('identity_number',$k->identity_number);
+                                                        @endphp
+                                                          @foreach($x as $xx)
+                                                          {{$xx['name']}}<br>
+                                                          @endforeach
+                                                        @endforeach
+
+
+
+
+                                                    @endforeach
+                                                   <hr>
+
+
+                                                   <small class="text-muted">
+                                                  {{auth()->user()->name}}({{$p->project_details_start_time}}) : {{$p->project_details_description}}
+                                                  </small><br>
+
+                                                    @php
+                                                    $kelompok_id = $project->kelompok->where('kelompok_nomor',$i)->pluck('id')->first();
+                                                    @endphp
+                                                   @foreach($komentar->where('project__details_id',$p->id)->where('kelompok_id',$kelompok_id) as $k)
+
+                                                     <small class="text-muted">
+                                                    {{$k['name']}}({{$k->created_at}}) : {{$k->komentar_desc}}
+                                                    @if($k->link != '#')
+                                                    <br><a href="localhost:8000{{$k->link}}" target="__blank">Attachment</a>
+                                                    @endif
+                                                    </small><br>
+
+                                                   @endforeach
+
+                                                   <form action="{{route('project.komentar.store',$project)}}" method="post" enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('POST')
+
+                                                    <br>
+                                                    @php
+
+                                                    @endphp
+                                                    <input type="hidden" name="project__details_id" value={{$p->id}} >
+                                                    <input type="hidden" name="kelompok_id" value={{$kelompok_id}} >
+                                                    <input type="hidden" name="identity_number" value={{auth()->user()->identity_number}} >
+                                                    <textarea required class="form-control" name="komentar_desc" ></textarea>
+                                                    <div class="attachmentDiv">
+                                                        <input type="file" name="attachment">
+                                                        <div class="myDiv">
+                                                            <input type="submit"  class="btn btn-dark btn-sm" value="Reply">
+                                                            </div>
+                                                    </div>
+
+                                                    </form>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                <form action="{{route('project.nilai.update',['id_project_details' => $p->id , 'id_kelompok' => $kelompok_id])}}" method="post">
+                                                    @method('POST')
+                                                    @CSRF
+                                                     Score
+                                                    <input type="number" class="" name="nilai" value={{$nilai}} >
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <input type="submit"  class="btn btn-primary" value="Set Nilai">
+                                                </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endfor
+                            </span>
                           </div>
                         </div>
                       </th>
+                      <td>
+                        <span class="badge badge-dot mr-4">
+                            <form method="get" target="_blank" action="http://localhost:8000{{$p->project_details_link}}">
+                                <button class="btn btn-primary" type="submit">Download</button>
+                             </form>
+                          </span>
+                      </td>
                     <td>
                       <span class="badge badge-dot mr-4">
                         {{$p->project_details_start_time}}
@@ -781,21 +885,16 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
                         </div>
                       </div>
                     </td> --}}
-                    <td class="text-right">
+                    {{-- <td class="text-right">
                       <div class="dropdown">
                         <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           <i class="fas fa-ellipsis-v"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <form id = "form1" action="{{ route('project.destroy', $project) }}" method="POST" style="display: inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <a class ="dropdown-item" href="#" onclick="confirm('Are you sure you want to delete this project?')? document.getElementById('form1').submit(): '#' ;">Delete</a>
-                                 </form>
                           <a class="dropdown-item" href="{{route('project.details.index', $project)}}">Setting</a>
                         </div>
                       </div>
-                    </td>
+                    </td> --}}
                   </tr>
                   @endforeach
                 </tbody>
@@ -868,11 +967,13 @@ $later =  $year . '-' . $month . '-' . $day2. 'T' . $hour .':'.$minute;
 
   <!-- Argon Scripts -->
   <!-- Core -->
+
   <script src="../../assets/vendor/jquery/dist/jquery.min.js"></script>
   <script src="../../assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../../assets/vendor/js-cookie/js.cookie.js"></script>
   <script src="../../assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
   <script src="../../assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+
   <!-- Argon JS -->
   <script src="../../assets/js/argon.js?v=1.2.0"></script>
   <script src="../../assets/js/modal.js"></script>
