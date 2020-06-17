@@ -43,6 +43,9 @@ Route::group(['middleware' => ['auth'] ], function () {
     Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
     Route::post('profile' , ['as' => 'photo.update', 'uses' => 'UsersDetailsController@store']);
     Route::post('project/{id_kelompok}/{id_project_details}',['as' => 'project.nilai.update', 'uses'=>'KelompokController@isiNilai']);
+    Route::get('export_excel/{project}',['as' => 'nilai.export', 'uses' => 'ProjectQuizController@export_excel']);
+    Route::get('nilai/{project}/',['as' => 'nilai.index', 'uses'=>'ProjectQuizController@index']);
+    Route::post('quiz/{project}/',['as' => 'quiz.insert', 'uses'=>'ProjectQuizController@insert']);
 });
 
 

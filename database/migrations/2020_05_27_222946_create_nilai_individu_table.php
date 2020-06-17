@@ -16,7 +16,7 @@ class CreateNilaiIndividuTable extends Migration
         Schema::create('nilai_individu', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('project_id');
-            $table->integer('nilai')->default('0');
+            $table->integer('nilai')->default('-1');
             $table->foreign('project_id')->references('id')->on('project')->onDelete('cascade')->onUpdate('cascade');
             $table->string('identity_number');
             $table->foreign('identity_number')->references('identity_number')->on('users')->onDelete('cascade')->onUpdate('cascade') ;

@@ -308,19 +308,23 @@ $later = date('Y-m-d\Th:i',$later);
             </div>
             <div class="col-lg-6 col-5 text-right">
               <!-- Button trigger modal -->
-
-              @if(count($project->project_details) == $project->project_phase )
-              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example4-modal-lg">
-              <i class="ni ni-fat-add"></i> New Phase
-              </button>
-              @elseif($project->project_status == "pending")
+              @if ($project->project_status == "pending")
               <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example2-modal-lg">
                 <i class="ni ni-fat-add"></i> Set up Question
                 </button>
-              @elseif( $project->project_status == "running" )
+
+              @elseif(count($project->project_details) != $project->project_phase+1 )
+              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example4-modal-lg">
+                <i class="ni ni-fat-add"></i> New Phase
+                </button>
+              @elseif (!$project->hasQuiz)
               <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-assignment-modal-lg">
                 <i class="ni ni-fat-add"></i> Give Individual Assignment
                 </button>
+              @else
+            <a href="{{route('nilai.export',$project)}}" type="button" class="btn btn-sm btn-neutral" >
+                <i class="ni ni-fat-add"></i> View Individual Assignment
+            </a>
               @endif
               <!-- Modal -->
                 <!-- Button trigger modal -->
@@ -370,6 +374,17 @@ $later = date('Y-m-d\Th:i',$later);
                             <a href="javascript:void(0);" class="add_button" title="Add field"><img src="../../assets/img/icons/add.png" width="25"/></a>
 
                                 </div>
+                                <br>
+                                <div class="form-row">
+                                    <div class="col">
+                                        Start Time
+                                      <input type="datetime-local" class="form-control" name="start_time" value="{{$today}}" >
+                                    </div>
+                                    <div class="col">
+                                        End Time
+                                    <input type="datetime-local" class="form-control" name="end_time" value= "{{$later}}">
+                                    </div>
+                                  </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -17,7 +17,6 @@
 $dateOfBirth = auth()->user()->users_details->users_details_birth ;
 $years = \Carbon\Carbon::parse($dateOfBirth)->age;
 $detail = auth()->user()->users_details;
-
 $today = date('Y-m-d\Th:i');
 $futureDate = mktime(date('h'), date('i'), 0, date("m"), date("d")+7, date("Y"));
 $later =  date("Y-m-d\Th:i", $futureDate);
@@ -301,10 +300,65 @@ $later =  date("Y-m-d\Th:i", $futureDate);
             </div>
             <div class="col-lg-6 col-5 text-right">
               <!-- Button trigger modal -->
-
-              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example2-modal-lg">
+                @if($project->hasQuiz)
+              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#quiz">
                 <i class="ni ni-fat-add"></i> Answer Individual Assignment
                 </button>
+                @endif
+                <!-- Button trigger modal -->
+
+                <!-- Modal -->
+                <div class="modal fade" id="quiz" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        <h5 class="modal-title">Individual Quiz</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                    </div>
+                            <div class="modal-body">
+                                <div class="container-fluid" align="left">
+
+                                @if ($nilai_individu->nilai != -1)
+                                You've Finished the Quiz
+                                @elseif (strtotime($project->quiz->start_time) > strtotime($today) ||  strtotime($project->quiz->end_time) < strtotime($today) )
+                                Quiz Unavaible
+                                @else
+                                <form action="{{route('quiz.insert',$project)}}" method="post">
+                                        @csrf
+                                   @php $num = 0 ;  @endphp
+                                   @foreach($project->quiz->question as $q)
+                                   <input type="hidden" name="id[]" value = {{$q->id}} />
+                                    {{++$num}}. {{$q->desc}}<br><br>
+                                    @foreach ($q->answer->shuffle() as $a)
+
+                                <input type="radio" name="answer[{{$num-1}}]" value={{$a->id}} />
+                                {{$a->desc}}<br>
+                                    @endforeach
+                                    <br>
+                                   @endforeach
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                               <input type="submit" class="btn btn-primary" value="Submit Answer" />
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    $('#exampleModal').on('show.bs.modal', event => {
+                        var button = $(event.relatedTarget);
+                        var modal = $(this);
+                        // Use above variables to manipulate the DOM
+
+                    });
+                </script>
+
 
               <!-- Modal -->
 
@@ -347,6 +401,8 @@ $later =  date("Y-m-d\Th:i", $futureDate);
                     </div>
                 </div>
             </div>
+
+
 
         @endif
 

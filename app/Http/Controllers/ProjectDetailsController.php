@@ -13,6 +13,7 @@ use Illuminate\Http\File;
 use App\User;
 use App\Komentar;
 use App\Nilai_Kelompok ;
+use App\Nilai_Individu ;
 
 class ProjectDetailsController extends Controller
 {
@@ -28,8 +29,9 @@ class ProjectDetailsController extends Controller
             ->join('kelompok_detail','kelompok.id','=','kelompok_detail.kelompok_id')
             ->where('kelompok_detail.identity_number',auth()->user()->identity_number)->get()->first();
             $user = User::get();
+            $nilai_individu = Nilai_Individu::where('identity_number',auth()->user()->identity_number)->get()->first();
             $komentar = Komentar::join('users','komentar.identity_number','=','users.identity_number')->select('users.name','komentar.*')->get();
-            return view('project.details.indexsiswa',compact('project','komentar','user','kelompok'));
+            return view('project.details.indexsiswa',compact('project','komentar','user','kelompok','nilai_individu'));
         }
 
         $user = User::get();

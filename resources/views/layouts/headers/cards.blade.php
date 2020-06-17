@@ -8,7 +8,11 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Traffic</h5>
+                                    @if(auth()->user()->account_type == "Guru")
+                                    <h3 class="mb-0">Project Assigned</h3>
+                                    @else
+                                    <h3 class="mb-0">Project Finished</h3>
+                                    @endif
                                     <span class="h2 font-weight-bold mb-0">350,897</span>
                                 </div>
                                 <div class="col-auto">

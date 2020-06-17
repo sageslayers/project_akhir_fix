@@ -581,7 +581,7 @@ $detail = auth()->user()->users_details;
                                                 @if($p->project_status == "pending")
                                                 <i class="bg-warning"></i>
                                                 <span class="status">Pending</span>
-                                                @elseif($p->project_status == "complete")
+                                                @elseif($p->project_status == "completed")
                                                 <i class="bg-success"></i>
                                                 <span class="status">Complete</span>
                                                 @elseif($p->project_status=="running")

@@ -16,11 +16,15 @@ class Project extends Model
         'project_group',
         'project_phase',
         'identity_number',
+        'hasQuiz'
     ];
     public function Project_Details(){
         return $this->hasMany('App\Project_Details');
     }
     public function Kelompok(){
         return $this->hasMany('App\Kelompok');
+    }
+    public function Quiz(){
+        return $this->hasOne('App\Quiz');
     }
 }

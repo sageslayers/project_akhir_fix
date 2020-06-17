@@ -9,6 +9,7 @@ use App\Kelompok ;
 use App\User ;
 use App\Kelompok_Detail;
 use App\Nilai_Individu ;
+use App\Quiz ;
 class ProjectController extends Controller
 {
     /**
@@ -18,10 +19,17 @@ class ProjectController extends Controller
      */
     public function index()
     {
+        $time  = date('Y-m-d\Th:i');
+        $p = Project::where('hasQuiz','1')->get();
+        foreach($p as $proj) {
+
+           if(strtotime($proj->quiz->end_time) < strtotime($time) ) {
+               $proj->project_status = 'completed' ;
+               $proj->save();
+           }
+        }
         $user = User::get();
         if (auth()->user()->account_type == "Siswa") {
-
-        $time  = date('Y-m-d\Th:i');
             $t = Project::join('project_details','project.id' ,'=','project_details.project_id')
             ->where('project_details_start_time','<=' , $time )
             //  ->where('project_details_end_time','>=', $time)
