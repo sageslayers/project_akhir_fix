@@ -7,14 +7,14 @@
 
     <title>{{ config('app.name', 'LearnQ') }}</title>
     <!-- Favicon -->
-    <link href="{{ asset('argon') }}/img/brand/favicon.png" rel="icon" type="image/png">
+    <link href="{{ secure_asset('argon') }}/img/brand/favicon.png" rel="icon" type="image/png">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <!-- Icons -->
-    <link href="{{ asset('argon') }}/vendor/nucleo/css/nucleo.css" rel="stylesheet">
-    <link href="{{ asset('argon') }}/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="{{ secure_asset('argon') }}/vendor/nucleo/css/nucleo.css" rel="stylesheet">
+    <link href="{{ secure_asset('argon') }}/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
     <!-- Argon CSS -->
-    <link type="text/css" href="{{ asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
+    <link type="text/css" href="{{ secure_asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
            <!-- Extra details for Live View on GitHub Pages -->
     <!-- Canonical SEO -->
     <link rel="canonical" href="https://www.creative-tim.com/product/argon-dashboard-laravel" />
@@ -22,9 +22,9 @@
     <meta name="keywords" content="dashboard, bootstrap 4 dashboard, bootstrap 4 design, bootstrap 4 system, bootstrap 4, bootstrap 4 uit kit, bootstrap 4 kit, argon, argon ui kit, creative tim, html kit, html css template, web template, bootstrap, bootstrap 4, css3 template, frontend, responsive bootstrap template, bootstrap ui kit, responsive ui kit, argon dashboard">
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
     <!-- Schema.org markup for Google+ -->
-    <meta itemprop="name" content="Argon - Free Dashboard for Bootstrap 4 by Creative Tim">
-    <meta itemprop="description" content="Start your development with a Dashboard for Bootstrap 4.">
-    <meta itemprop="image" content="https://s3.amazonaws.com/creativetim_bucket/products/96/original/opt_ad_thumbnail.jpg">
+    <meta itemprop="name" content="LearnQ - Project Based Learning Portal">
+    <meta itemprop="description" content="Make Learning Easier With LearnQ, Join and Become Our Part For Free.">
+    <meta itemprop="image" content="{{ secure_asset('argon') }}/img/brand/favicon.png" rel="icon" type="image/png">
     <!-- Twitter Card data -->
     <meta name="twitter:card" content="product">
     <meta name="twitter:site" content="@creativetim">
@@ -56,7 +56,7 @@
     </button>
     <!-- Brand -->
     <a class="navbar-brand pt-0" href="{{ route('home') }}">
-        <img src="{{ asset('argon') }}/img/brand/blue.png" class="navbar-brand-img" alt="...">
+        <img src="{{ secure_asset('argon') }}/img/brand/blue.png" class="navbar-brand-img" alt="...">
     </a>
     <!-- User -->
     <ul class="nav align-items-center d-md-none">
@@ -64,7 +64,7 @@
             <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="media align-items-center">
                     <span class="avatar avatar-sm rounded-circle">
-                    <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1-800x800.jpg">
+                    <img alt="Image placeholder" src="{{ secure_asset('argon') }}/img/theme/team-1-800x800.jpg">
                     </span>
                 </div>
             </a>
@@ -104,7 +104,7 @@
             <div class="row">
                 <div class="col-6 collapse-brand">
                     <a  href="{{ route('home') }}">
-                        <img src="{{ asset('argon') }}/img/brand/blue.png">
+                        <img src="{{ secure_asset('argon') }}/img/brand/blue.png">
                     </a>
                 </div>
                 <div class="col-6 collapse-close">
@@ -225,7 +225,7 @@
             <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="media align-items-center">
                     <span class="avatar avatar-sm rounded-circle">
-                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4-800x800.jpg">
+                        <img alt="Image placeholder" src="{{ secure_asset('argon') }}/img/theme/team-4-800x800.jpg">
                     </span>
                     <div class="media-body ml-2 d-none d-lg-block">
                         <span class="mb-0 text-sm  font-weight-bold">Admin Admin</span>
@@ -448,10 +448,10 @@
     </div>
 
 
-    <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
-        <script src="{{ asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ secure_asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
+        <script src="{{ secure_asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 
     <!-- Argon JS -->
-    <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
+    <script src="{{ secure_asset('argon') }}/js/argon.js?v=1.0.0"></script>
 </body></html>
