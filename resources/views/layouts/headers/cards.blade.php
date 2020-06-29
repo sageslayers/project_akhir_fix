@@ -32,8 +32,13 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
+                                    @if(auth()->user()->account_type == "Guru")
                                     <h5 class="card-title text-uppercase text-muted mb-0">Registered Class</h5>
-                                    <span class="h2 font-weight-bold mb-0">2,356</span>
+                                    <span class="h2 font-weight-bold mb-0">{{$kelas_guru_cnt}}</span>
+                                    @else
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Joined Class</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{$kelas_siswa_cnt}}</span>
+                                    @endif
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-warning text-white rounded-circle shadow">

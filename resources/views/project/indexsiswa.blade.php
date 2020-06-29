@@ -410,7 +410,11 @@ $later =  date("Y-m-d\Th:i", $futureDate);
                         @if($p->hasQuiz && !$p->hasTime)
                         <span class="status">Running (Individual Quiz)</span>
                         @else
+                        @if($p->hasTime)
                         <span class="status">Running ({{$t->where('project_id',$p->id)->pluck('project_details_type')->last()}})</span>
+                        @else
+                        <span class="status">Running ({{$p->project_details->where('project_id',$p->id)->pluck('project_details_type')->last()}})</span>
+                        @endif
                         @endif
                         @endif
                             @elseif($p->project_status == "final")

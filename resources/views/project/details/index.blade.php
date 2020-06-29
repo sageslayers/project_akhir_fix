@@ -509,7 +509,7 @@ $later = date('Y-m-d\Th:i',$later);
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><strong> {{__('Phase :  ')}}</strong></span>
                                         </div>
-                                    <input class="form-control{{ $errors->has('project_phase') ? ' is-invalid' : '' }}" placeholder="{{ __('Project phase') }}" readonly value="{{$project->project_phase}}" type="number" name="project_phase" required autofocus />
+                                    <input class="form-control{{ $errors->has('project_phase') ? ' is-invalid' : '' }}" placeholder="{{ __('Project phase') }}" readonly value="{{max($project->project_phase-1,0)}}" type="number" name="project_phase" required autofocus />
                                     </div>
                                 </div>
 

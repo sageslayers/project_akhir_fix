@@ -37,7 +37,7 @@ class KelompokController extends Controller
         ->select('kelompok_detail.id as kel_id','kelompok.*','users.name','users.identity_number','nilai_individu.nilai as nilai')
         ->orderBy('kelompok.kelompok_nomor')
         ->where('project.id',$project->id)
-
+        ->distinct()
         ->get();
 
 
@@ -48,7 +48,7 @@ class KelompokController extends Controller
             ->whereNotIn('kelas_detail.identity_number',$data->pluck('identity_number'))
             ->join('users','users.identity_number','kelas_detail.identity_number')
             ->select('kelas_detail.*','users.name')->get();
-        // dd($data);
+
         return view('project.group.index',compact('data','project','kelompok','members','nilai_individu','nilai_kelompok'));
     }
 

@@ -344,7 +344,7 @@ $later =  date("Y-m-d\Th:i", $futureDate);
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                @if ($nilai_individu->nilai == -1)
+                                @if ($nilai_individu->nilai == null)
                                <input type="submit" class="btn btn-primary" value="Submit Answer" />
                                @endif
                             </form>

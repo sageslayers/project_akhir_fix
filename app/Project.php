@@ -18,7 +18,7 @@ class Project extends Model
         'identity_number',
         'hasQuiz',
         'hasTime',
-            'kelas_id'
+        'kelas_id'
     ];
     public function Project_Details(){
         return $this->hasMany('App\Project_Details');

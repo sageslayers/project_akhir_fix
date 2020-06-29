@@ -65,10 +65,6 @@ class ProjectDetailsController extends Controller
         $time2 = $request->project_details_end_time ;
         $pd_time = Project_Details::where('project_id',$project->id)->get()->pluck('project_details_end_time')->last();
         if($pd_time != null ) {
-            // echo ($time1 );
-            // echo '<br>' ;
-            // echo $pd_time ;
-            // dd($time1 < $pd_time );
             if ($time1 < $pd_time){
                 return back()->withStatus(__("Project Start Time Invalid, There's Another Schedule on that time"));
             }
@@ -80,9 +76,7 @@ class ProjectDetailsController extends Controller
         if (count($project->project_details->where('project_details_type' , 'Basic Question')) == 1 && $request->project_details_type == 'Basic Question' )  {
             return back()->withStatus(__('you have basic question already'));
         }
-        if (count($project->project_details) > $project->project_phase   ){
-            return back()->withStatus(__('Total Phase exceed maximum'));
-        }
+
 
 
         $ProjectDetails = $request->all();
