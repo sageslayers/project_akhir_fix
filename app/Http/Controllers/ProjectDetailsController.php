@@ -29,7 +29,7 @@ class ProjectDetailsController extends Controller
             ->join('kelompok_detail','kelompok.id','=','kelompok_detail.kelompok_id')
             ->where('kelompok_detail.identity_number',auth()->user()->identity_number)->get()->first();
             $user = User::get();
-            $nilai_individu = Nilai_Individu::where('identity_number',auth()->user()->identity_number)->get()->first();
+            $nilai_individu = Nilai_Individu::where('identity_number',auth()->user()->identity_number)->where('project_id',$project->id)->get()->first();
             $komentar = Komentar::join('users','komentar.identity_number','=','users.identity_number')->select('users.name','komentar.*')->get();
             return view('project.details.indexsiswa',compact('project','komentar','user','kelompok','nilai_individu'));
         }
@@ -90,6 +90,8 @@ class ProjectDetailsController extends Controller
         $path = Storage::putFile('public/attachments', $request->file('project_details_link'));
         $ProjectDetails['project_details_link'] = Storage::url($path);
         $h = Project_Details::create($ProjectDetails);
+        $project->project_phase++;
+        $project->save();
         for ($i = 1 ;  $i <= $project->project_group ; $i++) {
             $nilai = new Nilai_Kelompok ;
             $nilai->project__details_id = $h->id ;
@@ -132,9 +134,19 @@ class ProjectDetailsController extends Controller
      * @param  \App\Project_Details  $project_Details
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project_Details $project_Details)
+    public function update(Request $request, Project $project ,$id)
     {
-        //
+        $pd = Project_Details::find($id);
+        if($request->project_details_link != null ){
+            $path = Storage::putFile('public/attachments', $request->file('project_details_link'));
+            $pd->project_details_link = Storage::url($path);
+        }
+        $pd->project_details_description = $request->project_details_description ;
+        $pd->project_details_start_time = $request->project_details_start_time ;
+        $pd->project_details_end_time = $request->project_details_end_time ;
+        $pd->update();
+        return back()->withStatus(__('Data has been updated'));
+
     }
 
     /**
@@ -143,7 +155,7 @@ class ProjectDetailsController extends Controller
      * @param  \App\Project_Details  $project_Details
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project_Details $project_Details)
+    public function destroy(Project $project ,  $pd)
     {
 
     }

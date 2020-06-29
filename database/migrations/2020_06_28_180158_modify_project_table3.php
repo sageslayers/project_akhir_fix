@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ModifyQuizTable extends Migration
+class ModifyProjectTable3 extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class ModifyQuizTable extends Migration
      */
     public function up()
     {
-        Schema::table('quiz', function (Blueprint $table) {
-            $table->dateTime('start_time')->nullable()->default(null);
-            $table->dateTIme('end_time')->nullable()->default(null);
+        Schema::table('project', function (Blueprint $table) {
+            $table->unsignedBigInteger('kelas_id');
+            $table->foreign('kelas_id')->references('id')->on('kelas')->onDelete('cascade')->onUpdate('cascade') ;
          });
     }
 

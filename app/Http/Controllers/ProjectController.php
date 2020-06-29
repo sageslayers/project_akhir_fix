@@ -10,6 +10,8 @@ use App\User ;
 use App\Kelompok_Detail;
 use App\Nilai_Individu ;
 use App\Quiz ;
+use App\Kelas ;
+use App\KelasDetail ;
 class ProjectController extends Controller
 {
     /**
@@ -23,7 +25,7 @@ class ProjectController extends Controller
         $p = Project::where('hasQuiz','1')->get();
         foreach($p as $proj) {
 
-           if(strtotime($proj->quiz->end_time) < strtotime($time) ) {
+           if($proj->hasTime && (strtotime($proj->quiz->end_time) < strtotime($time)) ) {
                $proj->project_status = 'completed' ;
                $proj->save();
            }
@@ -31,10 +33,10 @@ class ProjectController extends Controller
         $user = User::get();
         if (auth()->user()->account_type == "Siswa") {
             $t = Project::join('project_details','project.id' ,'=','project_details.project_id')
-            ->where('project_details_start_time','<=' , $time )
+            ->whereDate('project_details_start_time','<=' , $time )
             //  ->where('project_details_end_time','>=', $time)
-
             ->get();
+            // dd($t);
         $project_details = Project_Details::get();
         $project = Project::join('kelompok','kelompok.project_id' , '=' ,'project.id')
         ->join('kelompok_detail','kelompok.id','=','kelompok_detail.kelompok_id')
@@ -47,8 +49,11 @@ class ProjectController extends Controller
 
         return view('project.indexsiswa',compact('project','user','project_details','t'));
         }
-        $project = Project::where('identity_number', auth()->user()->identity_number)->orderBy('id', 'desc')->orderBy('project_status', 'desc')->get();
-        return view('project.index',compact('project','user'));
+        $kelas = Kelas::where('identity_number',auth()->user()->identity_number)->get();
+        $project = Project::where('project.identity_number', auth()->user()->identity_number)->orderBy('id', 'desc')->orderBy('project_status', 'desc')
+        ->join('kelas','project.kelas_id','kelas.id')
+        ->select('project.*','kelas.nama','kelas.key')->get();
+        return view('project.index',compact('project','user','kelas'));
     }
 
     /**
@@ -70,7 +75,7 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-        $count = User::where('account_type' , 'Siswa')->distinct()->get();
+        $count = KelasDetail::where('kelas_id' , $request->kelas_id)->get();
         $count = $count->shuffle();
         $cnt =  $count->count();
         $Project = $request->all();
@@ -120,9 +125,11 @@ class ProjectController extends Controller
      * @param  \App\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function show(Project $project)
+    public function finish(Project $project)
     {
-        //
+       $project->project_status = 'completed' ;
+       $project->save();
+       return back()->withStatus(__('Data has been Updated'));
     }
 
     /**

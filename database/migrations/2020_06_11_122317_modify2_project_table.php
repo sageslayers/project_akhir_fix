@@ -15,6 +15,7 @@ class Modify2ProjectTable extends Migration
     {
         Schema::table('project', function (Blueprint $table) {
            $table->boolean('hasQuiz')->nullable()->default(false);
+           $table->boolean('hasTime')->nullable()->default(false);
         });
     }
 

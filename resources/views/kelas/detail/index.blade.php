@@ -18,10 +18,6 @@ $dateOfBirth = auth()->user()->users_details->users_details_birth ;
 $years = \Carbon\Carbon::parse($dateOfBirth)->age;
 $detail = auth()->user()->users_details;
 
-$today = date('Y-m-d\Th:i');
-$futureDate = mktime(date('h'), date('i'), 0, date("m"), date("d")+7, date("Y"));
-$later =  date("Y-m-d\Th:i", $futureDate);
-// dd($t);
 ?>
 
 <!DOCTYPE html>
@@ -184,51 +180,7 @@ $later =  date("Y-m-d\Th:i", $futureDate);
                 <a href="#!" class="dropdown-item text-center text-primary font-weight-bold py-3">View all</a>
               </div>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="ni ni-ungroup"></i>
-              </a>
-              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-dark bg-default  dropdown-menu-right ">
-                <div class="row shortcuts px-4">
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-red">
-                      <i class="ni ni-calendar-grid-58"></i>
-                    </span>
-                    <small>Calendar</small>
-                  </a>
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-orange">
 
-                    </span>
-                    <small>Email</small>
-                  </a>
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-info">
-                      <i class="ni ni-credit-card"></i>
-                    </span>
-                    <small>Payments</small>
-                  </a>
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-green">
-                      <i class="ni ni-books"></i>
-                    </span>
-                    <small>Reports</small>
-                  </a>
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-purple">
-                      <i class="ni ni-pin-3"></i>
-                    </span>
-                    <small>Maps</small>
-                  </a>
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-yellow">
-                      <i class="ni ni-basket"></i>
-                    </span>
-                    <small>Shop</small>
-                  </a>
-                </div>
-              </div>
-            </li>
           </ul>
           <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
             <li class="nav-item dropdown">
@@ -257,17 +209,17 @@ $later =  date("Y-m-d\Th:i", $futureDate);
                 </a>
 
                 <div class="dropdown-divider"></div>
-                <form id = "logout-form"action="{{route('logout')}}" method="post">
-                        @method('POST')
-                        @csrf
-                        <button onclick="event.preventDefault();
-                        document.getElementById('logout-form').submit();" class="dropdown-item">
-                            <i class="ni ni-user-run"></i>
-                            <span>Logout</span>
-                          </a>
-                    </form>
+            <form id = "logout-form"action="{{route('logout')}}" method="post">
+                    @method('POST')
+                    @csrf
+                    <button onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();" class="dropdown-item">
+                        <i class="ni ni-user-run"></i>
+                        <span>Logout</span>
+                      </a>
+                </form>
 
-                  </div>
+              </div>
             </li>
           </ul>
         </div>
@@ -284,7 +236,8 @@ $later =  date("Y-m-d\Th:i", $futureDate);
               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                   <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                  <li class="breadcrumb-item active" aria-current="page"><a href="{{route('project.index')}}">Project</a></li>
+                  <li class="breadcrumb-item"><a href="{{route('project.index')}}">Project</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">##</li>
                 </ol>
               </nav>
             </div>
@@ -292,11 +245,24 @@ $later =  date("Y-m-d\Th:i", $futureDate);
               <!-- Button trigger modal -->
 
 
+
               <!-- Modal -->
+                <!-- Button trigger modal -->
+
+
+                <!-- Modal -->
+
+
+
+
+
 
 
 
             </div>
+
+
+
           </div>
         </div>
       </div>
@@ -308,7 +274,7 @@ $later =  date("Y-m-d\Th:i", $futureDate);
           <div class="card">
             <!-- Card header -->
             <div class="card-header border-0">
-              <h3 class="mb-0">Welcome {{auth()->user()->name}}  </h3>
+              <h3 class="mb-0">{{$kelas->nama}} ({{$kelas->key}}) </h3>
 
 
            <!-- Modal -->
@@ -347,20 +313,15 @@ $later =  date("Y-m-d\Th:i", $futureDate);
 
 
 
-
-
-
-
             <div class="table-responsive">
               <table class="table align-items-center table-flush">
                 <thead class="thead-light">
                   <tr>
-                    <th scope="col" class="sort" data-sort="name">Project Topic</th>
-                    <th scope="col" class="sort" data-sort="name">Instructor</th>
-                    <th scope="col" class="sort" data-sort="budget">Status</th>
-                    <th scope="col" class="sort" data-sort="budget">Your Group</th>
-                    <th scope="col" class="sort" data-sort="status">Start Time</th>
-                    <th scope="col" class="sort" data-sort="status">End Time</th>
+                    <th scope="col" class="sort" data-sort="name">Identity Number</th>
+                    <th scope="col" class="sort" data-sort="budget">Name</th>
+                    <th scope="col" class="sort" data-sort="budget">Email</th>
+
+
                     {{-- <th scope="col">Users</th>
                     <th scope="col" class="sort" data-sort="completion">Completion</th> --}}
                     <th scope="col"></th>
@@ -371,91 +332,43 @@ $later =  date("Y-m-d\Th:i", $futureDate);
                 @php
                 $no = 0 ;
                 @endphp
-                  @foreach ($project as $p)
-                    @php
+                  @foreach ($kelas_detail as $k)
 
-                    @endphp
 
                   <tr>
-                    <th scope="row">
-                      <div class="media align-items-center">
-                        <div class="media-body">
-                          <span class="name mb-0 text-sm">{{$p->project_topic}}</span>
-                        </div>
-                      </div>
-                    </th>
-                    <th scope="row">
-                        <div class="media align-items-center">
-                          <div class="media-body">
-                            <span class="name mb-0 text-sm">{{$user->where('identity_number',$p->identity_number)->pluck('name')->first()}}</span>
-                          </div>
-                        </div>
-                      </th>
-                      <td>
-                        <span class="badge badge-dot mr-4">
-                            @if($p->project_status == "pending")
-                            <i class="bg-warning"></i>
-                            <span class="status">Pending</span>
-                            @elseif($p->project_status == "completed")
-                            <i class="bg-success"></i>
-                            <span class="status">Complete</span>
-                            @elseif($p->project_status=="running")
 
-                            {{-- {{dd($t)}} --}}
-                        @if ($p->hasTime && strtotime($t->where('project_id',$p->id)->pluck('project_details_end_time')->last()) < strtotime($today))
-                        <i class="bg-warning"></i>
-                        <span class="bg-warning">Expired ({{$t->where('project_id',$p->id)->pluck('project_details_type')->last()}})</span>
-                        @else
-                        <i class="bg-info"></i>
-                        @if($p->hasQuiz && !$p->hasTime)
-                        <span class="status">Running (Individual Quiz)</span>
-                        @else
-                        <span class="status">Running ({{$t->where('project_id',$p->id)->pluck('project_details_type')->last()}})</span>
-                        @endif
-                        @endif
-                            @elseif($p->project_status == "final")
-                            <i class="bg-info"></i>
-                            <span class="status">Individual Assignment</span>
-                            @endif
-
-                        </span>
-                      </td>
                     <td>
-                      <span class="badge badge-dot mr-4">
-                        {{$p->kelompok_nomor}}
-                      </span>
-                    </td>
-                    <td>
-
                         <span class="badge badge-dot mr-4">
-                            @if($p->hasTime)
-                          {{$t->where('project_id',$p->id)->pluck('project_details_start_time')->last()}}
-                          @else
-                          -
-                          @endif
+                       {{$k->identity_number}}
 
                         </span>
                       </td>
                       <td>
                         <span class="badge badge-dot mr-4">
-                            @if($p->hasTime)
-                            {{$t->where('project_id',$p->id)->pluck('project_details_end_time')->last()}}
-                            @else
-                            -
-                            @endif
+                        {{$k->name}}
                         </span>
                       </td>
+                      <td>
+                        <span class="badge badge-dot mr-4">
+                        {{$k->email}}
+                        </span>
+                      </td>
+                      <td class="text-right">
+                        <div class="dropdown">
+                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-                    <td class="text-right">
-                      <div class="dropdown">
-                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fas fa-ellipsis-v"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-
-                            <a class="dropdown-item" href="{{route('project.details.index',$p)}}">Do Assignment</a>
+                                <form id="form1" action="{{ route('kelas.detail.destroy',$k->id) }}"
+                                onsubmit="return confirm('Are you sure you want to delete this participant?');" method="POST" style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="submit" class="dropdown-item" value="Delete">
+                                </form>
+                            </div>
                         </div>
-                      </div>
                     </td>
                   </tr>
                   @endforeach
@@ -529,11 +442,13 @@ $later =  date("Y-m-d\Th:i", $futureDate);
 
   <!-- Argon Scripts -->
   <!-- Core -->
+
   <script src="../../assets/vendor/jquery/dist/jquery.min.js"></script>
   <script src="../../assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../../assets/vendor/js-cookie/js.cookie.js"></script>
   <script src="../../assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
   <script src="../../assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+
   <!-- Argon JS -->
   <script src="../../assets/js/argon.js?v=1.2.0"></script>
   <script src="../../assets/js/modal.js"></script>

@@ -15,12 +15,13 @@ class CreateProjectDetailsTable extends Migration
     {
         Schema::create('project_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('project_id');
+
             $table->string('project_details_description');
-            $table->dateTime('project_details_start_time');
-            $table->dateTIme('project_details_end_time');
+            $table->dateTime('project_details_start_time')->nullable()->default(null);
+            $table->dateTIme('project_details_end_time')->nullable()->default(null);
             $table->string('project_details_type');
             $table->string('project_details_link');
+            $table->unsignedBigInteger('project_id');
             $table->foreign('project_id')->references('id')->on('project')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

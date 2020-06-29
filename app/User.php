@@ -40,5 +40,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function users_details() {
         return $this->hasOne('App\Users_Details') ;
     }
+    public function Kelas(){
+        return $this->belongsTo('App\Kelas');
+    }
 
 }

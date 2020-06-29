@@ -12,6 +12,7 @@ use App\Http\Controllers\collect;
 use App\Kelompok_Detail ;
 use App\Nilai_Individu ;
 use App\Nilai_Kelompok;
+use App\KelasDetail ;
 class KelompokController extends Controller
 {
     /**
@@ -23,6 +24,7 @@ class KelompokController extends Controller
     public function index(Project $project)
     {
         $nilai_kelompok = Nilai_Kelompok::WhereIn('project__details_id',$project->project_details->pluck('id'))->get();
+        $nilai_individu = Nilai_Individu::get();
         // dd($nilai_kelompok);
         if(auth()->user()->account_type == "Siswa" )
             return back() ;
@@ -31,37 +33,22 @@ class KelompokController extends Controller
         ->join('kelompok_detail','kelompok.id' , '=' , 'kelompok_detail.kelompok_id')
         ->join('project' , 'project.id' , '=' , 'kelompok.project_id')
         ->join('users','kelompok_detail.identity_number' , '=' , 'users.identity_number')
-        ->select('kelompok.*','users.name','users.identity_number')->orderBy('kelompok.kelompok_nomor')
+        ->join('nilai_individu','nilai_individu.identity_number','kelompok_detail.identity_number')
+        ->select('kelompok_detail.id as kel_id','kelompok.*','users.name','users.identity_number','nilai_individu.nilai as nilai')
+        ->orderBy('kelompok.kelompok_nomor')
         ->where('project.id',$project->id)
+
         ->get();
+
+
+
+
+
+        $members = KelasDetail::where('kelas_id',$project->kelas_id)
+            ->whereNotIn('kelas_detail.identity_number',$data->pluck('identity_number'))
+            ->join('users','users.identity_number','kelas_detail.identity_number')
+            ->select('kelas_detail.*','users.name')->get();
         // dd($data);
-        $data1 = DB::table('kelompok')
-        ->join('kelompok_detail','kelompok.id' , '=' , 'kelompok_detail.kelompok_id')
-        ->join('users','kelompok_detail.identity_number' , '=' , 'users.identity_number')
-        ->join('project' , 'project.id' , '=' , 'kelompok.project_id')
-        ->select('users.id')->orderBy('kelompok.kelompok_nomor')
-        ->where('project.id',$project->id)
-        ->get();
-
-        $d1 = collect();
-        $d2 = collect();
-        foreach ($data1 as $d ) {
-            $d1->push($d->id);
-        }
-        $data2 = DB::table('users')->select('id')->where('users.account_type','Siswa')->get();
-        foreach ($data2 as $d) {
-            $d2->push($d->id);
-        }
-        $d2 = $d2->diff($d1);
-        $members = collect();
-        // dd($data1);
-        $nilai_individu = Nilai_Individu::get();
-
-        foreach ($d2 as $m  ) {
-            $x = User::find($m);
-            $members->push(['identity_number'=> $x->identity_number , 'name' => $x->name]);
-        }
-        // dd($members);
         return view('project.group.index',compact('data','project','kelompok','members','nilai_individu','nilai_kelompok'));
     }
 
@@ -90,6 +77,13 @@ class KelompokController extends Controller
             return back()->with('status',"Member already have a group, try to remove first") ;
         }
         else {
+            $nilai_individu = Nilai_Individu::where('identity_number',$request->identity_number)->get();
+           if($nilai_individu->count() == 0 ){
+                $n = new Nilai_Individu;
+                $n->project_id = $project->id ;
+                $n->identity_number = $request->identity_number ;
+                $n->save();
+           }
             $kelompok_detail = new Kelompok_Detail ;
             // dd($request);
             $kelompok_detail = $request->all() ;

@@ -304,7 +304,7 @@ $later =  date("Y-m-d\Th:i", $futureDate);
               <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#quiz">
                 <i class="ni ni-fat-add"></i> Answer Individual Assignment
                 </button>
-                @endif
+
                 <!-- Button trigger modal -->
 
                 <!-- Modal -->
@@ -318,11 +318,12 @@ $later =  date("Y-m-d\Th:i", $futureDate);
                                             </button>
                                     </div>
                             <div class="modal-body">
-                                <div class="container-fluid" align="left">
+                                <div class="container-fluid" align = "left">
 
-                                @if ($nilai_individu->nilai != -1)
+                                @if ($nilai_individu->nilai)
                                 You've Finished the Quiz
-                                @elseif (strtotime($project->quiz->start_time) > strtotime($today) ||  strtotime($project->quiz->end_time) < strtotime($today) )
+                                @elseif ($project->hasTime && (strtotime($project->quiz->start_time) > strtotime($today) ||  strtotime($project->quiz->end_time) < strtotime($today) ) )
+
                                 Quiz Unavaible
                                 @else
                                 <form action="{{route('quiz.insert',$project)}}" method="post">
@@ -343,7 +344,9 @@ $later =  date("Y-m-d\Th:i", $futureDate);
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                @if ($nilai_individu->nilai == -1)
                                <input type="submit" class="btn btn-primary" value="Submit Answer" />
+                               @endif
                             </form>
                             </div>
                         </div>
@@ -358,7 +361,7 @@ $later =  date("Y-m-d\Th:i", $futureDate);
 
                     });
                 </script>
-
+  @endif
 
               <!-- Modal -->
 
@@ -461,13 +464,22 @@ $later =  date("Y-m-d\Th:i", $futureDate);
                           </span>
                       </td>
                     <td>
+
                       <span class="badge badge-dot mr-4">
+                        @if($project->hasTime)
                         {{$p->project_details_start_time}}
+                        @else
+                        -
+                        @endif
                       </span>
                     </td>
                     <td>
                         <span class="badge badge-dot mr-4">
+                            @if($project->hasTime)
                           {{$p->project_details_end_time}}
+                          @else
+                          -
+                          @endif
                         </span>
                       </td>
 
@@ -561,7 +573,7 @@ $later =  date("Y-m-d\Th:i", $futureDate);
 
                                         <br>
 
-                                        @if (strtotime($p->project_details_end_time) < strtotime($today) )
+                                        @if ($project->hasTime && strtotime($p->project_details_end_time) < strtotime($today) )
                                             EXPIRED
                                         @else
                                         <input type="hidden" name="project__details_id" value={{$p->id}} >

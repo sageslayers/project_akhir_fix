@@ -26,6 +26,7 @@ Route::group(['middleware' => ['auth'] ], function () {
     Route::resource('user', 'UserController', ['except' => ['show']]);
     Route::resource('project', 'ProjectController');
     Route::resource('project.details', 'ProjectDetailsController');
+    Route::post('project/{project}',['as' => 'project.update', 'uses'=>'ProjectController@finish']);
     Route::resource('project.quiz', 'ProjectQuizController');
     Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
     Route::get('project/{project}/group',['as' => 'project.group.index', 'uses'=>'KelompokController@index']);
@@ -44,6 +45,14 @@ Route::group(['middleware' => ['auth'] ], function () {
     Route::get('export_excel/{project}',['as' => 'nilai.export', 'uses' => 'ProjectQuizController@export_excel']);
     Route::get('nilai/{project}/',['as' => 'nilai.index', 'uses'=>'ProjectQuizController@index']);
     Route::post('quiz/{project}/',['as' => 'quiz.insert', 'uses'=>'ProjectQuizController@insert']);
+    Route::resource('kelas', 'KelasController');
+    Route::post('joinclass',['as' => 'kelas.join', 'uses'=>'KelasController@join']);
+    Route::resource('kelas.detail', 'KelasDetailController');
+    Route::delete('delete/{id}',['as' => 'kelas.detail.destroy', 'uses'=>'KelasDetailController@destroy']);
+    Route::delete('delete/{id}/{identity}',['as' => 'kelas.detail.destroy2', 'uses'=>'KelasDetailController@destroysiswa']);
+    Route::get('kelassiswa',['as' => 'kelas.indexsiswa', 'uses'=>'KelasController@index']);
+    Route::get('send', 'HomeController@sendNotification');
+
 });
 
 

@@ -1,9 +1,7 @@
 $('#modelId2').modal({
     show: true
 })
-$(document).ready(function() {
-    $('#tabelmodel').DataTable();
-} );
+
 $(document).ready(function(){
     var maxField = 50; //Input fields increment limitation
     var addButton = $('.add_button'); //Add button selector

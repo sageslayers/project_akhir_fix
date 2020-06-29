@@ -80,7 +80,7 @@ class ProjectQuizController extends Controller
         }
         $project->hasQuiz = true ;
         $project->save();
-        dd($request);
+        return back()->withStatus(__('Quiz has been Assigned'));
 
     }
 
@@ -137,7 +137,7 @@ class ProjectQuizController extends Controller
        }
        $val =  $cnt / $len * 100 ;
        Nilai_Individu::where('identity_number',auth()->user()->identity_number)->update(['nilai'=> $val] );
-
+       return back()->withStatus(__('Quiz has been Submitted'));
 
 
     }

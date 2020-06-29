@@ -18,7 +18,7 @@ class Project_Details extends Model
     ];
 
     public function Project(){
-        return $this->belongsTo('App\Project');
+        return $this->belongsTo('App\Project','project_id');
     }
 
     public function Komentar(){

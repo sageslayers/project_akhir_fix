@@ -455,15 +455,14 @@ $today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
                   @php
                     $cnt = 0 ;
                   @endphp
-                  @foreach ($kelompok as $kel)
-                   @foreach ($kel->kelompok_detail as $k)
+                  @foreach ($data as $d)
 
                   <tr>
 
                     <th scope="row">
                       <div class="media align-items-center">
                         <div class="media-body">
-                          <span class="name mb-0 text-sm">{{$kel->kelompok_nomor}}</span>
+                          <span class="name mb-0 text-sm">{{$d->kelompok_nomor}}</span>
 
                         </div>
                       </div>
@@ -471,23 +470,31 @@ $today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
                     <th scope="row">
                         <div class="media align-items-center">
                           <div class="media-body">
-                            <span class="name mb-0 text-sm">{{$data[$cnt++]->name}}</span>
+                            <span class="name mb-0 text-sm">{{$d->name}}</span>
                           </div>
                         </div>
                       </th>
                     <th scope ="row">
                       <span class="badge badge-dot mr-4">
-                        {{$k->identity_number}}
+                        {{$d->identity_number}}
                       </span>
                     </th>
                     <th scope ="row">
                         <span class="badge badge-dot mr-4">
-                          {{$nilai_individu->where('identity_number',$k->identity_number)->where('project_id',$project->id)->pluck('nilai')->first()  }}
+                        @if(!$d->nilai)
+                        -
+                        @else
+                        {{$d->nilai}}
+                        @endif
                         </span>
                       </th>
                       <th scope ="row">
                         <span class="badge badge-dot mr-4">
-                          {{$nilai_kelompok->where('kelompok_id',$kel->id)->avg('nilai')}}
+                            @if(!$nilai_kelompok->where('kelompok_id',$d->id)->avg('nilai'))
+                            -
+                            @else
+                            {{$nilai_kelompok->where('kelompok_id',$d->id)->avg('nilai')}}
+                            @endif
                         </span>
                       </th>
                     <td class="text-right">
@@ -497,7 +504,7 @@ $today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 
-                            <form id = "form" action="{{ route('project.group.destroy',$k) }}" onsubmit="return confirm('Are you sure you want to delete this member?');" method="POST" style="display: inline-block;">
+                            <form id = "form" action="{{ route('project.group.destroy',$d->kel_id) }}" onsubmit="return confirm('Are you sure you want to delete this member?');" method="POST" style="display: inline-block;">
                                 @csrf
                                 @method('POST')
                                <input type="submit" class="dropdown-item" value="Delete">
@@ -507,7 +514,7 @@ $today = $year . '-' . $month . '-' . $day . 'T' . $hour .':'.$minute;?>
                       </div>
                     </td>
                   </tr>
-                  @endforeach
+
                   @endforeach
                 </tbody>
               </table>

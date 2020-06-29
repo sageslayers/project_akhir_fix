@@ -190,51 +190,7 @@ $later = date('Y-m-d\Th:i',$later);
                 <a href="#!" class="dropdown-item text-center text-primary font-weight-bold py-3">View all</a>
               </div>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="ni ni-ungroup"></i>
-              </a>
-              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-dark bg-default  dropdown-menu-right ">
-                <div class="row shortcuts px-4">
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-red">
-                      <i class="ni ni-calendar-grid-58"></i>
-                    </span>
-                    <small>Calendar</small>
-                  </a>
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-orange">
 
-                    </span>
-                    <small>Email</small>
-                  </a>
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-info">
-                      <i class="ni ni-credit-card"></i>
-                    </span>
-                    <small>Payments</small>
-                  </a>
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-green">
-                      <i class="ni ni-books"></i>
-                    </span>
-                    <small>Reports</small>
-                  </a>
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-purple">
-                      <i class="ni ni-pin-3"></i>
-                    </span>
-                    <small>Maps</small>
-                  </a>
-                  <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-yellow">
-                      <i class="ni ni-basket"></i>
-                    </span>
-                    <small>Shop</small>
-                  </a>
-                </div>
-              </div>
-            </li>
           </ul>
           <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
             <li class="nav-item dropdown">
@@ -257,22 +213,11 @@ $later = date('Y-m-d\Th:i',$later);
                 <div class="dropdown-header noti-title">
                   <h6 class="text-overflow m-0">Welcome!</h6>
                 </div>
-                <a href="#!" class="dropdown-item">
+                <a href="{{route('profile.edit')}}" class="dropdown-item">
                   <i class="ni ni-single-02"></i>
                   <span>My profile</span>
                 </a>
-                <a href="#!" class="dropdown-item">
-                  <i class="ni ni-settings-gear-65"></i>
-                  <span>Settings</span>
-                </a>
-                <a href="#!" class="dropdown-item">
-                  <i class="ni ni-calendar-grid-58"></i>
-                  <span>Activity</span>
-                </a>
-                <a href="#!" class="dropdown-item">
-                  <i class="ni ni-support-16"></i>
-                  <span>Support</span>
-                </a>
+
                 <div class="dropdown-divider"></div>
             <form id = "logout-form"action="{{route('logout')}}" method="post">
                     @method('POST')
@@ -308,6 +253,15 @@ $later = date('Y-m-d\Th:i',$later);
             </div>
             <div class="col-lg-6 col-5 text-right">
               <!-- Button trigger modal -->
+              @if (!$project->hasQuiz)
+              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-assignment-modal-lg">
+                <i class="ni ni-fat-add"></i> Give Individual Assignment
+                </button>
+              @else
+            <a href="{{route('nilai.export',$project)}}" type="button" class="btn btn-sm btn-neutral" >
+                <i class="ni ni-fat-add"></i> View Individual Assignment
+            </a>
+            @endif
               @if ($project->project_status == "pending")
               <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example2-modal-lg">
                 <i class="ni ni-fat-add"></i> Set up Question
@@ -317,15 +271,10 @@ $later = date('Y-m-d\Th:i',$later);
               <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example4-modal-lg">
                 <i class="ni ni-fat-add"></i> New Phase
                 </button>
-              @elseif (!$project->hasQuiz)
-              <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-assignment-modal-lg">
-                <i class="ni ni-fat-add"></i> Give Individual Assignment
-                </button>
-              @else
-            <a href="{{route('nilai.export',$project)}}" type="button" class="btn btn-sm btn-neutral" >
-                <i class="ni ni-fat-add"></i> View Individual Assignment
-            </a>
+
               @endif
+
+
               <!-- Modal -->
                 <!-- Button trigger modal -->
 
@@ -375,6 +324,7 @@ $later = date('Y-m-d\Th:i',$later);
 
                                 </div>
                                 <br>
+                                @if($project->hasTime)
                                 <div class="form-row">
                                     <div class="col">
                                         Start Time
@@ -385,6 +335,7 @@ $later = date('Y-m-d\Th:i',$later);
                                     <input type="datetime-local" class="form-control" name="end_time" value= "{{$later}}">
                                     </div>
                                   </div>
+                                  @endif
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -399,7 +350,21 @@ $later = date('Y-m-d\Th:i',$later);
               <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target=".bd-example3-modal-lg">
                 <i class="ni ni-align-center"></i> View Project Details
                 </button>
+                @if($project->project_status != 'completed')
+                <br><br>
+                <form method="post" onsubmit="return confirm('Are you sure you want finish this project?');" action = "{{route('project.update',$project)}}" >
+                    @csrf
+
+                <button type="submit" class="btn btn-sm btn-success">
+                    <i class="ni ni-check-bold"></i> Mark As Done
+                    </button>
+                </form>
+                    @endif
+
             </div>
+
+
+
           </div>
         </div>
       </div>
@@ -601,6 +566,7 @@ $later = date('Y-m-d\Th:i',$later);
                               </div>
                               Attachment
                               <input type="file" class="form-control" required name="project_details_link" >
+                              @if($project->hasTime)
                               <div class="form-row">
                                 <div class="col">
                                     Start Time
@@ -612,7 +578,7 @@ $later = date('Y-m-d\Th:i',$later);
                                 <input type="datetime-local" class="form-control" name="project_details_end_time" value= "{{$later}}">
                                 </div>
                               </div>
-
+                              @endif
                               <input type="hidden" name="identity_number" value={{auth()->user()->identity_number}} />
                               <input type="hidden" name="project_details_type" value="Basic Question"/>
 
@@ -670,6 +636,7 @@ $later = date('Y-m-d\Th:i',$later);
                               </div>
                               Attachment
                               <input type="file" class="form-control" required name="project_details_link" >
+                              @if($project->hasTime)
                               <div class="form-row">
                                 <div class="col">
 
@@ -682,7 +649,7 @@ $later = date('Y-m-d\Th:i',$later);
                                     <input type="datetime-local" class="form-control" name="project_details_end_time" value= "{{$later}}">
                                 </div>
                               </div>
-
+                              @endif
                               <input type="hidden" name="identity_number" value={{auth()->user()->identity_number}} />
                               <input type="hidden" name="project_details_type" value="Phase {{count($project->project_details)}}"/>
 
@@ -715,6 +682,7 @@ $later = date('Y-m-d\Th:i',$later);
                     <th scope="col" class="sort" data-sort="budget">Attachment</th>
                     <th scope="col" class="sort" data-sort="status">Start Time</th>
                     <th scope="col" class="sort" data-sort="status">End Time</th>
+
                     {{-- <th scope="col">Users</th>
                     <th scope="col" class="sort" data-sort="completion">Completion</th> --}}
                     <th scope="col"></th>
@@ -798,7 +766,9 @@ $later = date('Y-m-d\Th:i',$later);
 
 
                                                    <small class="text-muted">
+
                                                   {{auth()->user()->name}}({{$p->project_details_start_time}}) : {{$p->project_details_description}}
+
                                                   </small><br>
 
                                                     @php
@@ -865,51 +835,106 @@ $later = date('Y-m-d\Th:i',$later);
                       </td>
                     <td>
                       <span class="badge badge-dot mr-4">
+                          @if($project->hasTime)
                         {{$p->project_details_start_time}}
+                        @else
+                        -
+                        @endif
                       </span>
                     </td>
                     <td>
+                        @if($project->hasTime)
                         <span class="badge badge-dot mr-4">
                           {{$p->project_details_end_time}}
+                          @else
+                          -
+                          @endif
                         </span>
                       </td>
-                    {{-- <td>
-                      <div class="avatar-group">
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                          <img alt="Image placeholder" src="../../assets/img/theme/team-1.jpg">
-                        </a>
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                          <img alt="Image placeholder" src="../../assets/img/theme/team-2.jpg">
-                        </a>
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                          <img alt="Image placeholder" src="../../assets/img/theme/team-3.jpg">
-                        </a>
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                          <img alt="Image placeholder" src="../../assets/img/theme/team-4.jpg">
-                        </a>
+                      <td class="text-right">
+                        <div class="dropdown">
+                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                <a class="dropdown-item"
+                                    href="#" data-toggle="modal" data-target="#modelId{{$p->id}}" >Edit Activity</a>
+                                <!-- Modal -->
 
-                      </div>
+                            </div>
+                        </div>
                     </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="completion mr-2">60%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                          </div>
+                    <div class="modal fade" id="modelId{{$p->id}}" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title">Edit {{$p->project_details_type}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <form enctype="multipart/form-data" method="post" action="{{ route('project.details.update',['project' => $project , 'detail' => $p->id]) }}" autocomplete="off">
+                                      @csrf
+
+                                      @method('put')
+
+                                      <h6 class="heading-small text-muted mb-4">{{ __('Project Details') }}</h6>
+
+
+
+
+                                          {{__('Description ')}}
+                                          <div class="form-group{{ $errors->has('project_details_description') ? ' has-danger' : '' }} mb-3">
+                                              <div class="input-group input-group-alternative">
+                                                  <div class="input-group-prepend">
+
+                                                  </div>
+                                                  <textarea rows="12" class="form-control{{ $errors->has('project_details_description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description.. ') }}" type="text" name="project_details_description"  required autofocus>{{$p->project_details_description}}</textarea>
+                                              </div>
+                                              @if ($errors->has('project_details_description'))
+                                                  <span class="invalid-feedback" style="display: block;" role="alert">
+                                                      <strong>{{ $errors->first('project_details_description') }}</strong>
+                                                  </span>
+                                              @endif
+
+                                              </div>
+                                              <div class="form-group{{ $errors->has('project_details_description') ? ' has-danger' : '' }} mb-3">
+                                                <div class="input-group input-group-alternative">
+                                                    <div class="input-group-prepend">
+
+                                                    </div>
+                                                    Attachment  <input type="file" name="project_details_link" value={{$p->project_details_link}}
+                                                    <br>
+                                                </div>
+
+                                            </div>
+
+
+                                            @if($project->hasTime)
+                                              <div class="form-row">
+                                                <div class="col">
+                                                    Start Time
+                                                  <input type="datetime-local" name="project_details_start_time" class="form-control" value={{date('Y-m-d\Th:i',strtotime($p->project_details_start_time))}}>
+                                                </div>
+                                                <div class="col">
+                                                    End Time
+                                                  <input type="datetime-local" name="project_details_end_time" class="form-control" value={{date('Y-m-d\Th:i',strtotime($p->project_details_end_time))}}>
+                                                </div>
+                                              </div>
+                                              @endif
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </form>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </td> --}}
-                    {{-- <td class="text-right">
-                      <div class="dropdown">
-                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fas fa-ellipsis-v"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                          <a class="dropdown-item" href="{{route('project.details.index', $project)}}">Setting</a>
-                        </div>
-                      </div>
-                    </td> --}}
+                    </div>
                   </tr>
                   @endforeach
                 </tbody>

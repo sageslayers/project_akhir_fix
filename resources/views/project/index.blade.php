@@ -192,53 +192,7 @@ $detail = auth()->user()->users_details;
                                     all</a>
                             </div>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                <i class="ni ni-ungroup"></i>
-                            </a>
-                            <div
-                                class="dropdown-menu dropdown-menu-lg dropdown-menu-dark bg-default  dropdown-menu-right ">
-                                <div class="row shortcuts px-4">
-                                    <a href="#!" class="col-4 shortcut-item">
-                                        <span class="shortcut-media avatar rounded-circle bg-gradient-red">
-                                            <i class="ni ni-calendar-grid-58"></i>
-                                        </span>
-                                        <small>Calendar</small>
-                                    </a>
-                                    <a href="#!" class="col-4 shortcut-item">
-                                        <span class="shortcut-media avatar rounded-circle bg-gradient-orange">
 
-                                        </span>
-                                        <small>Email</small>
-                                    </a>
-                                    <a href="#!" class="col-4 shortcut-item">
-                                        <span class="shortcut-media avatar rounded-circle bg-gradient-info">
-                                            <i class="ni ni-credit-card"></i>
-                                        </span>
-                                        <small>Payments</small>
-                                    </a>
-                                    <a href="#!" class="col-4 shortcut-item">
-                                        <span class="shortcut-media avatar rounded-circle bg-gradient-green">
-                                            <i class="ni ni-books"></i>
-                                        </span>
-                                        <small>Reports</small>
-                                    </a>
-                                    <a href="#!" class="col-4 shortcut-item">
-                                        <span class="shortcut-media avatar rounded-circle bg-gradient-purple">
-                                            <i class="ni ni-pin-3"></i>
-                                        </span>
-                                        <small>Maps</small>
-                                    </a>
-                                    <a href="#!" class="col-4 shortcut-item">
-                                        <span class="shortcut-media avatar rounded-circle bg-gradient-yellow">
-                                            <i class="ni ni-basket"></i>
-                                        </span>
-                                        <small>Shop</small>
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
                     </ul>
                     <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
                         <li class="nav-item dropdown">
@@ -262,22 +216,11 @@ $detail = auth()->user()->users_details;
                                 <div class="dropdown-header noti-title">
                                     <h6 class="text-overflow m-0">Welcome!</h6>
                                 </div>
-                                <a href="#!" class="dropdown-item">
+                                <a href="{{route('profile.edit')}}" class="dropdown-item">
                                     <i class="ni ni-single-02"></i>
                                     <span>My profile</span>
                                 </a>
-                                <a href="#!" class="dropdown-item">
-                                    <i class="ni ni-settings-gear-65"></i>
-                                    <span>Settings</span>
-                                </a>
-                                <a href="#!" class="dropdown-item">
-                                    <i class="ni ni-calendar-grid-58"></i>
-                                    <span>Activity</span>
-                                </a>
-                                <a href="#!" class="dropdown-item">
-                                    <i class="ni ni-support-16"></i>
-                                    <span>Support</span>
-                                </a>
+
                                 <div class="dropdown-divider"></div>
                                 <form id = "logout-form"action="{{route('logout')}}" method="post">
                                         @method('POST')
@@ -315,14 +258,14 @@ $detail = auth()->user()->users_details;
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal"
                                 data-target=".bd-example-modal-lg">
-                                <i class="ni ni-fat-add"></i> new project
+                                <i class="ni ni-fat-add"></i> New Project
                             </button>
 
                             <!-- Modal -->
 
 
 
-                            <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+                            <td></td>
                         </div>
                     </div>
                 </div>
@@ -440,7 +383,7 @@ $detail = auth()->user()->users_details;
                                                         </div>
                                                         <textarea
                                                             class="form-control{{ $errors->has('project_kd') ? ' is-invalid' : '' }}"
-                                                            placeholder="{{ __('Kompetensi Dasar') }}" type="text"
+                                                            placeholder="{{ __('Basic Competencies') }}" type="text"
                                                             name="project_kd" required autofocus></textarea>
                                                     </div>
                                                     @if ($errors->has('project_kd'))
@@ -475,7 +418,8 @@ $detail = auth()->user()->users_details;
                                                         <input
                                                             class="form-control{{ $errors->has('project_group') ? ' is-invalid' : '' }}"
                                                             placeholder="{{ __('Total Group') }}" min="1" type="number"
-                                                            name="project_group" required autofocus>
+                                                            name="project_group" required autofocus><br>
+
                                                     </div>
                                                     @if ($errors->has('project_group'))
                                                     <span class="invalid-feedback" style="display: block;" role="alert">
@@ -492,23 +436,32 @@ $detail = auth()->user()->users_details;
                                                                     name="randomGroup" id="" value="checkedValue"
                                                                     checked>
                                                                 Generate Random Group
+                                                                <br>
+                                                                <input type="checkbox" class="form-check-input"
+                                                                    name="hasTime" id="" value="1"
+                                                                    checked>
+                                                                    Enable Time Limit
                                                             </label>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div
-                                                    class="form-group{{ $errors->has('project_phase') ? ' has-danger' : '' }} mb-3">
-                                                    <div class="input-group input-group-alternative">
-                                                        <div class="input-group-prepend">
+                                                class="form-group{{ $errors->has('project_indicator') ? ' has-danger' : '' }} mb-3">
+                                                <div class="input-group input-group-alternative">
+                                                    <div class="input-group-prepend">
 
-                                                        </div>
-                                                        <input
-                                                            class="form-control{{ $errors->has('project_phase') ? ' is-invalid' : '' }}"
-                                                            placeholder="{{ __('Project phase') }}" type="number"
-                                                            min="3" name="project_phase" required autofocus>
                                                     </div>
+                                                  <select class ="form-control" name="kelas_id" >
+                                                      <option value="">-- SELECT CLASS --</option>
+                                                      @foreach($kelas as $k)
+                                                        <option value = {{$k->id}}>{{$k->nama}} ({{$k->kelas_detail->count()}} Participant)</option>
+                                                      @endforeach
+                                                  </select>
                                                 </div>
+
+
+                                            </div>
+
 
 
                                                 <input type="hidden" name="identity_number"
@@ -534,6 +487,7 @@ $detail = auth()->user()->users_details;
                                 <thead class="thead-light">
                                     <tr>
                                         <th scope="col" class="sort" data-sort="name">Project</th>
+                                        <th scope="col" class="sort" data-sort="name">Class</th>
                                         <th scope="col" class="sort" data-sort="name">Total Phase</th>
                                         <th scope="col" class="sort" data-sort="name">Total Group</th>
                                         <th scope="col" class="sort" data-sort="budget">Created at</th>
@@ -552,6 +506,13 @@ $detail = auth()->user()->users_details;
                                             <div class="media align-items-center">
                                                 <div class="media-body">
                                                     <span class="name mb-0 text-sm">{{$p->project_topic}}</span>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th scope="row">
+                                            <div class="media align-items-center">
+                                                <div class="media-body">
+                                                    <span class="name mb-0 text-sm">{{$p->nama}} ({{$p->key}})</span>
                                                 </div>
                                             </div>
                                         </th>
@@ -594,33 +555,6 @@ $detail = auth()->user()->users_details;
 
                                             </span>
                                         </td>
-                                        {{-- <td>
-                      <div class="avatar-group">
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                          <img alt="Image placeholder" src="../assets/img/theme/team-1.jpg">
-                        </a>
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                          <img alt="Image placeholder" src="../assets/img/theme/team-2.jpg">
-                        </a>
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                          <img alt="Image placeholder" src="../assets/img/theme/team-3.jpg">
-                        </a>
-                        <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                          <img alt="Image placeholder" src="../assets/img/theme/team-4.jpg">
-                        </a>
-
-                      </div>
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <span class="completion mr-2">60%</span>
-                        <div>
-                          <div class="progress">
-                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </td> --}}
                                         <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
@@ -644,6 +578,7 @@ $detail = auth()->user()->users_details;
                                         </td>
                                     </tr>
                                     @endforeach
+
                                 </tbody>
                             </table>
                         </div>

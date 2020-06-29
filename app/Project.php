@@ -16,7 +16,9 @@ class Project extends Model
         'project_group',
         'project_phase',
         'identity_number',
-        'hasQuiz'
+        'hasQuiz',
+        'hasTime',
+            'kelas_id'
     ];
     public function Project_Details(){
         return $this->hasMany('App\Project_Details');
@@ -27,4 +29,8 @@ class Project extends Model
     public function Quiz(){
         return $this->hasOne('App\Quiz');
     }
+    public function User(){
+        return $this->hasOne('App\User','identity_number');
+    }
+
 }
