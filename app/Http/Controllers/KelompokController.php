@@ -13,6 +13,9 @@ use App\Kelompok_Detail ;
 use App\Nilai_Individu ;
 use App\Nilai_Kelompok;
 use App\KelasDetail ;
+use App\Project_Details;
+use Notification;
+use App\Notifications\MyFirstNotification;
 class KelompokController extends Controller
 {
     /**
@@ -94,11 +97,31 @@ class KelompokController extends Controller
 
     public function isiNilai($id_kelompok, $id_project_details , Request $request)
     {
+        $kelompok = Kelompok_Detail::where('kelompok_id',$id_kelompok)->get();
+        $pd = Project_Details::where('id',$id_project_details)->first();
+        $project = $pd->project ;
+        $pengirim = User::where('identity_number',$project->identity_number)->first();
+        foreach($kelompok as $k){
+            $user = User::where('identity_number',$k->identity_number)->first();
+            $details = [
+                'subject' => "Score Update on " . $project->project_topic . ' ' . $pd->project_details_type,
 
+                'greeting' => 'Hi, '.$user->name,
+
+                'body' => $pengirim->name . ' has set your score on ' . $project->project_topic . ' ' . $pd->project_details_type,
+
+                'thanks' => 'Your Group Score Is : ' . $request->nilai ,
+
+                'actionText' => null,
+
+                'actionURL' =>null ,
+            ];
+
+            Notification::send($user, new MyFirstNotification($details));
+        }
         $Nilai_Kelompok = Nilai_Kelompok::where('project__details_id',$id_project_details)
                             ->where('kelompok_id',$id_kelompok)->update(['nilai' => $request->nilai]);
-        // $Nilai_Kelompok['nilai'] = $request->nilai;
-        // $Nilai_Kelompok->update();
+
         return back()->with('status',"Score has been updated");
     }
 

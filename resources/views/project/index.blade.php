@@ -519,7 +519,7 @@ $detail = auth()->user()->users_details;
                                         <th scope="row">
                                             <div class="media align-items-center">
                                                 <div class="media-body">
-                                                    <span class="name mb-0 text-sm">{{$p->project_phase}}</span>
+                                                    <span class="name mb-0 text-sm">{{max(0,$p->project_phase-1)}}</span>
                                                 </div>
                                             </div>
                                         </th>

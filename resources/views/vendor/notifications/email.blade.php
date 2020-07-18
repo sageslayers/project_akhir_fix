@@ -28,6 +28,7 @@
             $color = 'primary';
     }
 ?>
+
 @foreach ($outroLines as $line)
 {{ $line }}
 

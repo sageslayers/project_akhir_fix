@@ -11,7 +11,11 @@ use App\User ;
 use App\Nilai_Individu;
 use App\Exports\NilaiExport;
 use Maatwebsite\Excel\Facades\Excel;
-
+use Notification;
+use Illuminate\Support\Collection;
+use App\Http\Controllers\collect;
+use App\Notifications\MyFirstNotification;
+use Illuminate\Support\HtmlString;
 
 class ProjectQuizController extends Controller
 {
@@ -131,12 +135,49 @@ class ProjectQuizController extends Controller
     public function insert(Project $project , Request $request) {
         $cnt = 0 ;
         $len = count($request->id) ;
+
+        $question = collect();
+        $answer = collect();
        for ($i = 0 ; $i < $len; $i++) {
           $q = Question::find($request->id[$i]);
-          if ($q->answer_id == $request->answer[$i]) $cnt++;
+          $question->push('Question : ' . $q->desc  );
+          $ans = Answer::where('id',$request->answer[$i])->first();
+          if ($q->answer_id == $request->answer[$i]) {
+              $cnt++;
+              $answer->push('Answer : ' . $ans->desc . '(Correct)');
+          }
+         else{
+            $answer->push('Answer : ' . $ans->desc . '(Wrong)');
+         }
+
+       }
+       $line = '<small>' ;
+        for($i = 0 ; $i < $question->count() ; $i++){
+        $line = $line . $question[$i] . '<br>' . $answer[$i] . '<br>' ;
+
        }
        $val =  $cnt / $len * 100 ;
-       Nilai_Individu::where('identity_number',auth()->user()->identity_number)->update(['nilai'=> $val] );
+       $line = '<br>' . $line . '<strong>Score : ' . $val .'</strong>' ;
+       $line = $line . '</small>' ;
+
+
+       Nilai_Individu::where('identity_number',auth()->user()->identity_number)->where('project_id',$project->id)->update(['nilai'=> $val] );
+       $user = User::where('identity_number',$project->identity_number)->first();
+       $pengirim = User::where('identity_number',auth()->user()->identity_number)->first();
+       $details = [
+        'subject' => "Individual Quiz on " . $project->project_topic . ' Result ' ,
+        'greeting' => 'Hi, '.$user->name,
+
+        'body' => $pengirim->name . ' has sent you an individual quiz answer on project '.$project->project_topic ,
+
+        'thanks' => new HtmlString($line)   ,
+
+        'actionText' => 'View Attachment',
+
+        'actionURL' => $request->file('attachment') ?  url($komentar['link']) : null ,
+    ];
+
+    Notification::send($user, new MyFirstNotification($details));
        return back()->withStatus(__('Quiz has been Submitted'));
 
 
